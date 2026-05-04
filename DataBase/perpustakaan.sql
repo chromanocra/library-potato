@@ -25,13 +25,15 @@ DROP TABLE IF EXISTS `buku`;
 CREATE TABLE `buku` (
   `bukuID` bigint NOT NULL AUTO_INCREMENT,
   `kategoriID` bigint DEFAULT NULL,
-  `judul_buku` varchar(50) NOT NULL,
-  `penulis` varchar(50) NOT NULL,
-  `penerbit` varchar(50) NOT NULL,
+  `judul_buku` varchar(150) NOT NULL,
+  `penulis` varchar(100) NOT NULL,
+  `penerbit` varchar(100) NOT NULL,
   `tahun_terbit` year DEFAULT NULL,
   `isbn` varchar(20) DEFAULT NULL,
-  `status` enum('1','2') DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`bukuID`),
+  UNIQUE KEY `isbn` (`isbn`),
   KEY `FK_buku_kategori` (`kategoriID`),
   CONSTRAINT `FK_buku_kategori` FOREIGN KEY (`kategoriID`) REFERENCES `kategori` (`kategoriID`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -56,9 +58,11 @@ DROP TABLE IF EXISTS `denda`;
 CREATE TABLE `denda` (
   `dendaID` bigint NOT NULL AUTO_INCREMENT,
   `pinjamID` bigint DEFAULT NULL,
-  `jumlah_denda` decimal(10,2) DEFAULT NULL,
-  `status_denda` enum('1','2') DEFAULT NULL,
+  `jumlah_denda` decimal(10,2) DEFAULT '0.00',
+  `status_denda` enum('unpaid','paid') DEFAULT 'unpaid',
   `tanggal_bayar` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`dendaID`),
   KEY `FK_denda_pinjam` (`pinjamID`),
   CONSTRAINT `FK_denda_pinjam` FOREIGN KEY (`pinjamID`) REFERENCES `peminjaman` (`pinjamID`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -85,12 +89,14 @@ CREATE TABLE `detail` (
   `detailID` bigint NOT NULL AUTO_INCREMENT,
   `pinjamID` bigint DEFAULT NULL,
   `bukuID` bigint DEFAULT NULL,
-  `qty` int DEFAULT NULL,
+  `qty` int NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`detailID`),
   KEY `FK_detail_pinjam` (`pinjamID`),
   KEY `FK_detail_buku` (`bukuID`),
   CONSTRAINT `FK_detail_buku` FOREIGN KEY (`bukuID`) REFERENCES `buku` (`bukuID`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `FK_detail_pinjam` FOREIGN KEY (`pinjamID`) REFERENCES `peminjaman` (`pinjamID`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `FK_detail_pinjam` FOREIGN KEY (`pinjamID`) REFERENCES `peminjaman` (`pinjamID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -113,7 +119,9 @@ DROP TABLE IF EXISTS `kategori`;
 CREATE TABLE `kategori` (
   `kategoriID` bigint NOT NULL AUTO_INCREMENT,
   `nama_kategori` varchar(50) NOT NULL,
-  `deskripsi` varchar(100) NOT NULL,
+  `deskripsi` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`kategoriID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -137,11 +145,13 @@ DROP TABLE IF EXISTS `peminjaman`;
 CREATE TABLE `peminjaman` (
   `pinjamID` bigint NOT NULL AUTO_INCREMENT,
   `userID` bigint DEFAULT NULL,
-  `tanggal_pinjam` datetime DEFAULT NULL,
-  `batas_kembali` datetime DEFAULT NULL,
+  `tanggal_pinjam` datetime DEFAULT CURRENT_TIMESTAMP,
+  `batas_kembali` datetime NOT NULL,
   `tanggal_kembali` datetime DEFAULT NULL,
-  `status` enum('1','2') DEFAULT NULL,
-  `total_denda` decimal(10,2) DEFAULT NULL,
+  `status` enum('borrowed','returned','late') DEFAULT 'borrowed',
+  `total_denda` decimal(10,2) DEFAULT '0.00',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`pinjamID`),
   KEY `FK_peminjaman_user` (`userID`),
   CONSTRAINT `FK_peminjaman_user` FOREIGN KEY (`userID`) REFERENCES `pengguna` (`userID`) ON DELETE SET NULL ON UPDATE CASCADE
@@ -166,12 +176,19 @@ DROP TABLE IF EXISTS `pengguna`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pengguna` (
   `userID` bigint NOT NULL AUTO_INCREMENT,
+  `nomor_identitas` varchar(255) NOT NULL,
+  `role` enum('admin','user') NOT NULL,
   `username` varchar(50) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
   `gender` char(1) NOT NULL,
   `phone` varchar(100) NOT NULL,
-  `status` enum('1','2') DEFAULT NULL,
-  PRIMARY KEY (`userID`)
+  `status` enum('active','inactive') DEFAULT 'active',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`userID`),
+  UNIQUE KEY `nomor_identitas` (`nomor_identitas`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -195,8 +212,11 @@ CREATE TABLE `reservasi` (
   `reservasiID` bigint NOT NULL AUTO_INCREMENT,
   `userID` bigint DEFAULT NULL,
   `bukuID` bigint DEFAULT NULL,
-  `tgl_reservasi` datetime DEFAULT NULL,
-  `status_reservasi` enum('1','2') DEFAULT NULL,
+  `tgl_reservasi` datetime DEFAULT CURRENT_TIMESTAMP,
+  `expired_at` datetime DEFAULT NULL,
+  `status_reservasi` enum('pending','approved','cancelled','completed') DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`reservasiID`),
   KEY `FK_reservasi_user` (`userID`),
   KEY `FK_reservasi_buku` (`bukuID`),
@@ -213,6 +233,39 @@ LOCK TABLES `reservasi` WRITE;
 /*!40000 ALTER TABLE `reservasi` DISABLE KEYS */;
 /*!40000 ALTER TABLE `reservasi` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `stok`
+--
+
+DROP TABLE IF EXISTS `stok`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `stok` (
+  `stokID` bigint NOT NULL AUTO_INCREMENT,
+  `bukuID` bigint DEFAULT NULL,
+  `total_copy` int NOT NULL DEFAULT '0',
+  `avail_copy` int NOT NULL DEFAULT '0',
+  `borrowed_copy` int NOT NULL DEFAULT '0',
+  `reserved_copy` int NOT NULL DEFAULT '0',
+  `damaged_copy` int NOT NULL DEFAULT '0',
+  `lost_copy` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`stokID`),
+  UNIQUE KEY `bukuID` (`bukuID`),
+  CONSTRAINT `FK_stok_buku` FOREIGN KEY (`bukuID`) REFERENCES `buku` (`bukuID`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stok`
+--
+
+LOCK TABLES `stok` WRITE;
+/*!40000 ALTER TABLE `stok` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stok` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -223,4 +276,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-26 21:51:39
+-- Dump completed on 2026-05-01 14:39:59
