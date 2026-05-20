@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peminjaman Buku - Perpustakaan</title>
+    
+    <link rel="stylesheet" type="text/css" href="../css2/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css2/style.css">
+    <link rel="stylesheet" href="../css2/responsive.css">
+    <link rel="stylesheet" href="../css2/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="icon" type="image/png" href="../images/s.png">
+    
+    <style>
+        body { background-color: #f8f9fa; }
+        .main-card { box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2); border-radius: 10px; }
+        
+        /* Tema Tabel Hijau */
+        .table-green th {
+            background-color: #15803d !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+
+  <div class="header_section shadow-sm bg-white">
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#"><img src="../images/s.png" alt="Logo" width="40"></a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto"> 
+            <li class="nav-item">
+            <a class="nav-link" href="../Dashboard/dashboard.html">Daftar Buku</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active fw-bold" href="daftar_pinjam.html">Peminjaman</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="reservasi.html">Reservasi</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="history.html">History</a>
+            </li>
+            <li class="nav-item ms-lg-3">
+            <a class="btn btn-outline-danger btn-sm mt-1" href="#" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </li>
+        </ul>
+        </div>
+      </nav>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: rgb(0, 0, 0); ;"> Riwayat Peminjaman </h2>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahPinjam"> ➕ Pinjam Buku Baru </button>
+    </div>
+
+    <div class="card main-card border-0">
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-green">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Batas Kembali</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="wadah-riwayat">
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">Memuat data peminjaman...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTambahPinjam" tabindex="-1" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Form Peminjaman Buku Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="form-peminjaman">
+                <div class="modal-body" >
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-bold">Username Anggota</label>
+                        <input type="text" 
+                            class="form-control" 
+                            id="username" 
+                            placeholder="Masukkan Username" 
+                            style="background-color: #ffffff !important; color: #495057 !important; border: 1px solid #ced4da !important;"
+                            required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="batas_kembali" class="form-label fw-bold">Batas Tanggal Kembali</label>
+                        <input type="date" 
+                        class="form-control" 
+                        id="batas_kembali" required
+                        placeholder="Batas Kembali"
+                        style="background-color: #ffffff !important; color: #495057 !important; border: 1px solid #ced4da !important;"
+                        required>
+                    </div>
+
+                    <hr>
+                    <h5 class="fw-bold">Buku yang Dipinjam</h5>
+                    
+                    <div class="row g-2 mb-2">
+                        <div class="col-7">
+                            <label class="small text-muted fw-bold">Judul Buku (Judul)</label>
+                            <input 
+                            type="text" 
+                            class="form-control form-buku-judul" 
+                            placeholder="Contoh: Harry Potter" 
+                            Style="background-color: #ffffff !important; color: #495057 !important; border: 1px solid #ced4da !important;"
+                            required>
+                        </div>
+                        <div class="col-5">
+                            <label class="small text-muted fw-bold">Jumlah (Qty)</label>
+                            <input 
+                            type="number" 
+                            class="form-control form-buku-qty" value="1" min="1" 
+                            Style="background-color: #ffffff !important; color: #495057 !important; border: 1px solid #ced4da !important;"
+                            required>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-7">
+                            <input 
+                            type="text" 
+                            class="form-control form-buku-judul" 
+                            placeholder="Judul Buku Kedua (Opsional)"
+                            Style="background-color: #ffffff !important; color: #495057 !important; border: 1px solid #ced4da !important;"
+                            >
+                        </div>
+                        <div class="col-5">
+                            <input 
+                            type="number" 
+                            class="form-control form-buku-qty" 
+                            value="1" 
+                            min="1"
+                            Style="background-color: #ffffff !important; color: #495057 !important; border: 1px solid #ced4da !important;"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Kirim Permintaan Peminjaman</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="peminjaman.js"></script>
+</body>
+</html>
