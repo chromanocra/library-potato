@@ -7,6 +7,9 @@ use CodeIgniter\Config\BaseConfig;
 /**
  * Cross-Origin Resource Sharing (CORS) Configuration
  *
+ * Dikonfigurasi untuk menerima request dari VS Code Live Server
+ * (biasanya http://127.0.0.1:5500 atau http://localhost:5500)
+ *
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
  */
 class Cors extends BaseConfig
@@ -26,80 +29,61 @@ class Cors extends BaseConfig
      */
     public array $default = [
         /**
-         * Origins for the `Access-Control-Allow-Origin` header.
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-         *
-         * E.g.:
-         *   - ['http://localhost:8080']
-         *   - ['https://www.example.com']
+         * Origins tetap yang diizinkan.
+         * Dikosongkan — kita pakai allowedOriginsPatterns agar fleksibel
+         * untuk semua port localhost (Live Server bisa pakai port berbeda-beda).
          */
-        'allowedOrigins' => [],
+        "allowedOrigins" => [],
 
         /**
-         * Origin regex patterns for the `Access-Control-Allow-Origin` header.
+         * Regex pattern untuk origin yang diizinkan.
+         * Pattern di-wrap otomatis oleh CI4 menjadi: #\A<pattern>\z#
          *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
-         *
-         * NOTE: A pattern specified here is part of a regular expression. It will
-         *       be actually `#\A<pattern>\z#`.
-         *
-         * E.g.:
-         *   - ['https://\w+\.example\.com']
+         * Cocok dengan:
+         *  - http://127.0.0.1:5500  (Live Server default)
+         *  - http://localhost:5500
+         *  - http://127.0.0.1 / http://localhost (tanpa port)
          */
-        'allowedOriginsPatterns' => [],
+        "allowedOriginsPatterns" => [
+            "http://127\.0\.0\.1:\d+", // http://127.0.0.1:<port apapun>
+            "http://localhost:\d+", // http://localhost:<port apapun>
+            "http://localhost", // http://localhost tanpa port
+            "http://127\.0\.0\.1", // http://127.0.0.1 tanpa port
+        ],
 
         /**
-         * Weather to send the `Access-Control-Allow-Credentials` header.
-         *
-         * The Access-Control-Allow-Credentials response header tells browsers whether
-         * the server allows cross-origin HTTP requests to include credentials.
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+         * Tidak pakai credentials berbasis cookie/session.
+         * Autentikasi memakai localStorage, sehingga false cukup.
          */
-        'supportsCredentials' => false,
+        "supportsCredentials" => false,
 
         /**
-         * Set headers to allow.
-         *
-         * The Access-Control-Allow-Headers response header is used in response to
-         * a preflight request which includes the Access-Control-Request-Headers to
-         * indicate which HTTP headers can be used during the actual request.
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+         * Header yang boleh dikirim frontend ke backend.
+         * 'Content-Type' wajib ada agar fetch() dengan JSON bisa preflight.
          */
-        'allowedHeaders' => [],
+        "allowedHeaders" => [
+            "Content-Type",
+            "Authorization",
+            "X-Requested-With",
+            "Accept",
+        ],
 
         /**
-         * Set headers to expose.
-         *
-         * The Access-Control-Expose-Headers response header allows a server to
-         * indicate which response headers should be made available to scripts running
-         * in the browser, in response to a cross-origin request.
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers
+         * Header response yang boleh dibaca oleh script frontend.
+         * Kosong = hanya header CORS-safelisted yang bisa dibaca.
          */
-        'exposedHeaders' => [],
+        "exposedHeaders" => [],
 
         /**
-         * Set methods to allow.
-         *
-         * The Access-Control-Allow-Methods response header specifies one or more
-         * methods allowed when accessing a resource in response to a preflight
-         * request.
-         *
-         * E.g.:
-         *   - ['GET', 'POST', 'PUT', 'DELETE']
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods
+         * HTTP method yang diizinkan.
+         * OPTIONS wajib ada agar preflight request browser berhasil.
          */
-        'allowedMethods' => [],
+        "allowedMethods" => ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 
         /**
-         * Set how many seconds the results of a preflight request can be cached.
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
+         * Berapa detik browser boleh cache hasil preflight request.
+         * 7200 = 2 jam.
          */
-        'maxAge' => 7200,
+        "maxAge" => 7200,
     ];
 }

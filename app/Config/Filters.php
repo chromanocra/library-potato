@@ -25,15 +25,15 @@ class Filters extends BaseFilters
      * or [filter_name => [classname1, classname2, ...]]
      */
     public array $aliases = [
-        'csrf'          => CSRF::class,
-        'toolbar'       => DebugToolbar::class,
-        'honeypot'      => Honeypot::class,
-        'invalidchars'  => InvalidChars::class,
-        'secureheaders' => SecureHeaders::class,
+        "csrf" => CSRF::class,
+        "toolbar" => DebugToolbar::class,
+        "honeypot" => Honeypot::class,
+        "invalidchars" => InvalidChars::class,
+        "secureheaders" => SecureHeaders::class,
         'cors'          => Cors::class,
-        'forcehttps'    => ForceHTTPS::class,
-        'pagecache'     => PageCache::class,
-        'performance'   => PerformanceMetrics::class,
+        "forcehttps" => ForceHTTPS::class,
+        "pagecache" => PageCache::class,
+        "performance" => PerformanceMetrics::class,
     ];
 
     /**
@@ -50,14 +50,14 @@ class Filters extends BaseFilters
      * @var array{before: list<string>, after: list<string>}
      */
     public array $required = [
-        'before' => [
-            'forcehttps', // Force Global Secure Requests
-            'pagecache',  // Web Page Caching
+        "before" => [
+            "forcehttps", // Force Global Secure Requests
+            "pagecache", // Web Page Caching
         ],
-        'after' => [
-            'pagecache',   // Web Page Caching
-            'performance', // Performance Metrics
-            'toolbar',     // Debug Toolbar
+        "after" => [
+            "pagecache", // Web Page Caching
+            "performance", // Performance Metrics
+            "toolbar", // Debug Toolbar
         ],
     ];
 
@@ -70,18 +70,13 @@ class Filters extends BaseFilters
      *     after: array<string, array{except: list<string>|string}>|list<string>
      * }
      */
-    public array $globals = [
-        'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
-        ],
-        'after' => [
-            // 'honeypot',
-            // 'secureheaders',
-        ],
-    ];
-
+public array $globals = [
+    'before' => [
+        // 'cors',// 
+    ],
+    'after' => [
+    ],
+];
     /**
      * List of filter aliases that works on a
      * particular HTTP method (GET, POST, etc.).
@@ -106,5 +101,13 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+        // Terapkan CORS filter ke semua route /api/*
+        // 'before' menangani preflight OPTIONS request dari browser
+        // 'after'  menambahkan header CORS ke setiap response
+        "cors" => [
+            "before" => ["api/*"],
+            "after" => ["api/*"],
+        ],
+    ];
 }
