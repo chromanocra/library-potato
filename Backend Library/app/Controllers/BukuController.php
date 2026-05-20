@@ -6,23 +6,22 @@ use CodeIgniter\RESTful\ResourceController;
 
 class BukuController extends ResourceController
 {
-    // Kasih tahu Controller ini pakai Model yang mana
+
     protected $modelName = 'App\Models\BukuModel';
     
-    // Set format output ke JSON (Wajib untuk API)
+
     protected $format    = 'json'; 
 
     // 1. Endpoint: GET /api/buku (Menampilkan semua buku)
     public function index()
     {
-        // Ambil semua data dari tabel buku lewat Model
-        $data = $this->model->findAll();
-        
-        return $this->respond([
-            'status' => 200,
-            'pesan'  => 'Berhasil mengambil data buku',
-            'data'   => $data
-        ], 200);
+    $db   = \Config\Database::connect();
+    $builder = $db->table('buku');
+    $builder->select('buku.*, kategori.nama_kategori');
+    $builder->join('kategori', 'kategori.kategoriID = buku.kategoriID', 'left');
+    $query   = $builder->get();
+    $data = $query->getResultArray(); 
+    return $this->respond($data);
     }
 
     // 2. Endpoint: GET /api/buku/(:num) (Menampilkan 1 buku spesifik)

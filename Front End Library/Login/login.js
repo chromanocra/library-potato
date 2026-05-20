@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Redirect kalau sudah login sebelumnya
             if (user.role === 'admin') {
-                window.location.href = '../Dashboard/dashboard_admin.html';
+                window.location.href = '../Admin/dashboard_admin.html';
                 return;
             }
             if (user.role === 'user') {
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Redirect sesuai dengan role (user atau admin)
                 if (userRole.toLowerCase() === 'admin') {
                     alert('Login Admin berhasil!');
-                    window.location.href = '../Dashboard/dashboard_admin.html';
+                    window.location.href = '../Admin/dashboard_admin.html';
                 } else {
                     alert('Login Berhasil!');
                     window.location.href = '../Dashboard/dashboard.html';
