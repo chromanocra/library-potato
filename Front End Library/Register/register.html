@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Register Siswa - Fapus</title>
+        <link rel="stylesheet" href="../js_css/style.css" />
+        <link rel="website icon" type="image/png" href="../images/a.png" />
+        <style>
+            body {
+                /* Sesuaikan path gambar background */
+                background-image: url("../images/ijo.jpg");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
+
+            /* Penyesuaian form untuk menampung input baru tanpa berantakan */
+            .form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px 20px;
+                margin-bottom: 20px;
+            }
+
+            .form-container {
+                padding: 2rem !important;
+            }
+
+            .login-container {
+                width: 40rem !important;
+            }
+
+            /* =================================================
+               Select Gender — disamakan persis dengan style
+               .login-container form input di style.css
+               ================================================= */
+            select#gender {
+                /* Layout — sama dengan input */
+                display: block;
+                width: 100%;
+                margin: 2rem 0;
+                padding: 14.5px 2.5rem 14.5px 14.5px; /* padding-right lebih besar untuk arrow */
+
+                /* Visual — sama dengan input */
+                background-color: #8ec6ac63;
+                border: none;
+                border-radius: 5px;
+                color: var(--color);
+                font-weight: 500;
+                font-size: 15px;
+                letter-spacing: 0.8px;
+                backdrop-filter: blur(15px);
+                outline: none;
+                cursor: pointer;
+
+                /* Hapus tampilan native browser (kotak abu-abu default) */
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+
+                /* Arrow kustom — pakai background-image TERPISAH dari background-color */
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%23ffffff' d='M7 10L1 4h12z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 14px center;
+                background-size: 14px;
+            }
+
+            select#gender:focus {
+                /* Efek fokus — sama dengan input */
+                box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
+                animation: wobble 0.3s ease-in;
+                -webkit-animation: wobble 0.3s ease-in;
+            }
+
+            /* Background option dropdown agar terbaca (tidak transparan) */
+            select#gender option {
+                background-color: #1a1a2e;
+                color: #ffffff;
+                font-weight: 500;
+            }
+
+            /* Placeholder 'Pilih Jenis Kelamin' tampil lebih redup */
+            select#gender option[value=""] {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            @media (max-width: 600px) {
+                .form-grid {
+                    grid-template-columns: 1fr;
+                }
+                .login-container {
+                    width: 90% !important;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <section class="container">
+            <div class="login-container">
+                <div class="circle circle-one"></div>
+                <div class="form-container">
+                    <img
+                        src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png"
+                        alt="illustration"
+                        class="illustration"
+                        style="width: 50%; margin-bottom: 10px"
+                    />
+                    <h1 class="opacity">REGISTER</h1>
+
+                    <form id="form-register">
+                        <div class="form-grid">
+                            <div>
+                                <input
+                                    type="text"
+                                    id="nisn"
+                                    placeholder="Masukan Nomor Identitas"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    id="username"
+                                    placeholder="Buat Username"
+                                    required
+                                />
+                                <input
+                                    type="password"
+                                    id="password"
+                                    placeholder="Buat Password"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    placeholder="Nomor Telepon"
+                                    required
+                                />
+                                <select id="gender" required>
+                                    <option value="" disabled selected>
+                                        Pilih Jenis Kelamin
+                                    </option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    placeholder="Masukkan Email Aktif"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="opacity" id="btn-register">
+                            SIGN UP
+                        </button>
+                    </form>
+
+                    <div class="opacity">
+                        <p style="text-align: center" class="copyright_text">
+                            SUDAH BUAT AKUN?
+                            <a href="../Login/login.html"> MASUK</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="circle circle-two"></div>
+            </div>
+            <div class="theme-btn-container"></div>
+        </section>
+
+        <script src="register.js"></script>
+    </body>
+</html>

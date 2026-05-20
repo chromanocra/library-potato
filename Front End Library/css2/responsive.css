@@ -1,0 +1,80 @@
+/* =============================================
+   responsive.css - Halaman Depan Perpustakaan
+   ============================================= */
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) {
+  .banner_taital {
+    font-size: 36px;
+  }
+  .banner_img img {
+    width: 100%;
+  }
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+  .header_section .navbar-collapse {
+    background: #000;
+    padding: 15px;
+  }
+  .banner_taital {
+    font-size: 28px;
+  }
+  .banner_img {
+    margin-top: 20px;
+  }
+  .about_section .row {
+    flex-direction: column;
+  }
+}
+
+/* Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) {
+  .banner_section {
+    padding: 40px 0;
+  }
+  .banner_taital {
+    font-size: 22px;
+    text-align: center;
+  }
+  .btn_main {
+    justify-content: center;
+  }
+  .banner_img {
+    text-align: center;
+    margin-top: 30px;
+  }
+  .banner_img img {
+    max-width: 280px;
+  }
+  .footer_section .col-sm-6 {
+    margin-bottom: 20px;
+  }
+  .layout-card-custom {
+    gap: 1rem;
+  }
+  .card {
+    width: 45% !important;
+  }
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+  .banner_taital {
+    font-size: 18px;
+  }
+  .started_text a {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+  .card {
+    width: 100% !important;
+  }
+  .footer_text {
+    font-size: 16px;
+  }
+  .copyright_text {
+    font-size: 12px;
+  }
+}

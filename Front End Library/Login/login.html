@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Siswa - Fapus</title>
+    <link rel="stylesheet" href="../js_css/style.css">
+    <link rel="website icon" type="image/png" href="../images/a.png">
+</head>
+
+<style>
+    body {
+        /* Keluar dari folder Login, lalu cari gambar di folder images */
+        background-image: url('../images/ijo.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    
+    /* Loading Spinner Minimalis untuk Tombol */
+    .spinner {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<body>
+    <section class="container">
+        <div class="login-container">
+            <div class="circle circle-one"></div>
+            <div class="form-container">
+                <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+                <h1 class="opacity">LOGIN</h1>
+                
+                <form id="form-login">
+                    <input type="text" id="username" placeholder="MASUKAN USERNAME" required />
+                    <input type="password" id="password" placeholder="MASUKAN PASSWORD" required />
+                    
+                    <button type="submit" class="opacity" id="btn-submit">
+                        <span id="login-spinner" style="display: none;" class="spinner"></span>
+                        MASUK
+                    </button>
+                    
+                    <button class="opacity" onclick="window.location.href='../'" type="button">KEMBALI</button>
+                </form>
+                
+                <div class="opacity" style="text-align: center;">
+                <a href="../register/register.html">REGISTER</a></p>
+                </div>
+            </div>
+            <div class="circle circle-two"></div>
+        </div>
+    </section>
+
+    <script src="login.js"></script>
+</body>
+</html>
