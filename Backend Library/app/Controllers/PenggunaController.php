@@ -10,7 +10,30 @@ class PenggunaController extends ResourceController
     protected $format = "json";
 
     /**
-     * POST /api/register
+     * GET /api/pengguna
+     * Menampilkan semua daftar member (pengguna dengan role 'user')
+     */
+    public function index()
+    {
+        $model = new PenggunaModel();
+
+        // Ambil semua pengguna yang memiliki role 'user'
+        $data = $model->where("role", "user")->findAll();
+
+        // Hilangkan password dari array agar aman tidak bocor ke frontend
+        foreach ($data as &$user) {
+            unset($user["password"]);
+        }
+
+        return $this->respond([
+            "status" => 200,
+            "pesan"  => "Berhasil mengambil data member",
+            "data"   => $data,
+        ], 200);
+    }
+
+    /**
+     * POST /api/pengguna/register
      * Mendaftarkan user baru dengan role default 'user'
      */
     public function register()
@@ -100,7 +123,7 @@ class PenggunaController extends ResourceController
     }
 
     /**
-     * POST /api/login
+     * POST /api/pengguna/login
      * Verifikasi username + password
      */
     public function login()
@@ -144,8 +167,75 @@ class PenggunaController extends ResourceController
         return $this->respond([
             "status" => 200,
             "pesan"  => "Login berhasil!",
-            "role"   => $userRole, // <-- Memastikan 'role' selalu ada nilainya
+            "role"   => $userRole, 
             "data"   => $user,
         ], 200);
+    }
+
+    /**
+     * PUT /api/pengguna/(:num)
+     * Update data member berdasarkan userID
+     */
+    public function update($id = null)
+    {
+        $input = $this->request->getJSON(true);
+        
+        if (empty($input)) {
+            return $this->fail(["pesan" => "Data tidak boleh kosong"], 400);
+        }
+
+        $model = new PenggunaModel();
+        
+        // Cek apakah data dengan userID tersebut ada
+        $user = $model->find($id);
+        if (!$user) {
+            return $this->failNotFound("Data pengguna tidak ditemukan");
+        }
+
+        // Siapkan data yang akan diupdate, jika kosong gunakan data lama
+        $dataUpdate = [
+            "username" => $input["username"] ?? $user["username"],
+            "email"    => $input["email"] ?? $user["email"],
+            "phone"    => $input["phone"] ?? $user["phone"],
+            "gender"   => $input["gender"] ?? $user["gender"]
+        ];
+
+        // Jika password diisi dari frontend, hash password barunya
+        if (!empty($input["password"])) {
+            $dataUpdate["password"] = password_hash($input["password"], PASSWORD_DEFAULT);
+        }
+
+        if ($model->update($id, $dataUpdate)) {
+            return $this->respond([
+                "status" => 200,
+                "pesan"  => "Data pengguna berhasil diupdate"
+            ]);
+        }
+
+        return $this->fail(["pesan" => "Gagal update data pengguna", "errors" => $model->errors()], 500);
+    }
+
+    /**
+     * DELETE /api/pengguna/(:num)
+     * Hapus data member berdasarkan userID
+     */
+    public function delete($id = null)
+    {
+        $model = new PenggunaModel();
+        
+        // Cek apakah data dengan userID tersebut ada
+        $user = $model->find($id);
+        if (!$user) {
+            return $this->failNotFound("Data pengguna tidak ditemukan");
+        }
+
+        if ($model->delete($id)) {
+            return $this->respondDeleted([
+                "status" => 200,
+                "pesan"  => "Data pengguna berhasil dihapus"
+            ]);
+        }
+
+        return $this->fail(["pesan" => "Gagal menghapus data pengguna"], 500);
     }
 }

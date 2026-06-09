@@ -14,7 +14,6 @@ class KategoriController extends ResourceController
     // 1. Endpoint: GET /api/kategori (Menampilkan semua kategori)
     public function index()
     {
-        // Ambil semua data dari tabel kategori lewat Model
         $data = $this->model->findAll();
         
         return $this->respond([
@@ -27,10 +26,8 @@ class KategoriController extends ResourceController
     // 2. Endpoint: GET /api/kategori/(:num) (Menampilkan 1 kategori spesifik)
     public function show($id = null)
     {
-        // Cari kategori berdasarkan kategoriID
         $data = $this->model->find($id);
         
-        // Jika datanya ada
         if ($data) {
             return $this->respond([
                 'status' => 200,
@@ -39,14 +36,12 @@ class KategoriController extends ResourceController
             ], 200);
         }
 
-        // Jika datanya tidak ada (ID tidak valid)
         return $this->failNotFound("Kategori dengan ID $id tidak ditemukan");
     }
 
-    // Postingan untuk menambahkan kategori baru bisa ditambahkan di sini (create)
+    // 3. Endpoint: POST /api/kategori (Menambahkan kategori baru)
     public function create()
     {
-        // Menangkap data JSON yang dikirim oleh user/frontend
         $data = $this->request->getJSON();
 
         if ($this->model->insert($data)) {
@@ -60,11 +55,9 @@ class KategoriController extends ResourceController
         return $this->fail($this->model->errors());
     }
 
-
-    // Putingan untuk update kategori bisa ditambahkan di sini (update)
+    // 4. Endpoint: PUT /api/kategori/(:num) (Update kategori)
     public function update($id = null)
     {
-        // Menangkap data JSON yang dikirim oleh user/frontend
         $data = $this->request->getJSON();
 
         if ($this->model->update($id, $data)) {
@@ -78,7 +71,7 @@ class KategoriController extends ResourceController
         return $this->fail($this->model->errors());
     }
 
-     // Delete kategori bisa ditambahkan di sini (delete)
+     // 5. Endpoint: DELETE /api/kategori/(:num) (Menghapus kategori)
      public function delete($id = null)
      {
          if ($this->model->delete($id)) {

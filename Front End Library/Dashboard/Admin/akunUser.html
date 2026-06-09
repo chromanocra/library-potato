@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar User - Perpustakaan</title>
+    
+    <link rel="icon" href="../../images/s.png" type="image/png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="../../assets2/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <style>
+        /* RESET & DASAR */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f4fcf7; /* Putih kehijauan sangat muda */
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR (Kiri) */
+        .sidebar {
+            width: 260px;
+            background-color: #16a34a; /* Hijau Utama */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            padding: 20px 0;
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 25px;
+            transition: 0.3s;
+        }
+
+        .sidebar-menu li a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background-color: #15803d; /* Hijau lebih gelap untuk efek hover */
+            border-left: 5px solid #ffffff;
+        }
+
+        .logout-btn {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logout-btn a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: #dc2626;
+            border-radius: 8px;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .logout-btn a:hover {
+            background-color: #b91c1c;
+        }
+
+        /* MAIN CONTENT (Kanan) */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background-color: #ffffff;
+            height: 70px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+        }
+
+        .topbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .topbar .user-info i {
+            font-size: 24px;
+            color: #16a34a;
+        }
+
+        /* DASHBOARD CONTENT */
+        .content {
+            padding: 30px;
+        }
+
+        .page-title {
+            color: #1f2937;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* TABEL CONTAINER & OVERRIDE DATATABLES */
+        .table-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .table-container h3 {
+            color: #16a34a;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        table.dataTable {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin-top: 15px !important;
+        }
+
+        table.dataTable th, table.dataTable td {
+            padding: 15px !important;
+            vertical-align: middle;
+            border-bottom: 1px solid #e5e7eb !important;
+            border-top: none !important;
+        }
+
+        table.dataTable th {
+            background-color: #f9fafb !important;
+            color: #4b5563 !important;
+            font-weight: 600 !important;
+            border-bottom: 2px solid #e5e7eb !important;
+        }
+
+        /* Pagination Styling */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #16a34a !important;
+            color: white !important;
+            border: 1px solid #16a34a !important;
+            border-radius: 6px;
+        }
+
+        /* Action Buttons Inside Table */
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 6px;
+            border: none;
+            color: white;
+            transition: 0.2s;
+            margin: 0 3px;
+        }
+
+        .btn-edit { background-color: #f59e0b; }
+        .btn-edit:hover { background-color: #d97706; }
+        
+        .btn-delete { background-color: #ef4444; }
+        .btn-delete:hover { background-color: #dc2626; }
+        
+        /* Modal Customization */
+        .modal-header {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .modal-title {
+            color: #16a34a;
+            font-weight: 600;
+        }
+        .form-label {
+            color: #4b5563;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-book-reader"></i> FAPUS
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard_admin.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="buku.html"><i class="fas fa-book"></i> Data Buku</a></li>
+            <li><a href="kategori.html"><i class="fas fa-tags"></i> Data Kategori</a></li>
+            <li class="active"><a href="akunUser.html"><i class="fas fa-users"></i> Data Anggota</a></li>
+            <li><a href="peminjaman.html"><i class="fas fa-exchange-alt"></i> Peminjaman</a></li>
+            <li><a href="#"><i class="fas fa-file-alt"></i> Laporan</a></li>
+        </ul>
+        <div class="logout-btn">
+            <a href="#" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div class="toggle-btn"></div>
+            <div class="user-info">
+                <span id="sessUsernameDropdown">Memuat...</span>
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+
+        <section class="content">
+            <h2 class="page-title">Data Pengguna</h2>
+
+            <div class="table-container">
+                <h3>Daftar Member</h3>
+                <div class="table-responsive">
+                    <table class="table" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nomor Identitas</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>No Telp</th>
+                                <th>Gender</th>
+                                <th style="text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableMemberBody">
+                            <tr><td colspan="7" class="text-center" style="padding: 30px !important; color: #6b7280;">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal fade" id="modalEditMember" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit User - <span id="titleEditNama"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditMember">
+                        <div class="mb-3">
+                            <label for="editIdent" class="form-label">Nomor Identitas</label>
+                            <input type="text" id="editNisn" name="nomor_identitas" class="form-control" readonly style="background-color: #f3f4f6;">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editNama" class="form-label">Nama</label>
+                            <input type="text" id="editNama" name="nama" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Password</label>
+                            <input type="text" id="editPassword" name="password" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" id="editEmail" name="email" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPhone" class="form-label">No Telp</label>
+                            <input type="text" id="editPhone" name="no_telp" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <select id="editGender" name="gender" class="form-select" required>
+                                <option class="hidden" selected disabled value="">Pilih Gender</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer px-0 pb-0 border-top-0">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn" style="background-color: #16a34a; color: white;">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets2/vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets2/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../assets2/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script src="akunUser.js"></script>
+
+</body>
+</html>

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.removeItem("user_logged_in");
 
       // WAJIB ?from=logout agar login.js tidak auto-forward balik ke sini
-      window.location.href = "../Login/login.html?from=logout";
+      window.location.href = "../../Index Utama/index.html?from=logout";
     });
   }
 });

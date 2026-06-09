@@ -1,0 +1,233 @@
+CRITICAL - 2026-05-21 04:16:43 --> CodeIgniter\HTTP\Exceptions\HTTPException: Failed to parse JSON string. Error: Syntax error
+[Method: POST, Route: api/buku]
+in SYSTEMPATH\HTTP\IncomingRequest.php on line 406.
+ 1 SYSTEMPATH\HTTP\IncomingRequest.php(406): CodeIgniter\HTTP\Exceptions\HTTPException::forInvalidJSON('Syntax error')
+ 2 APPPATH\Controllers\BukuController.php(50): CodeIgniter\HTTP\IncomingRequest->getJSON()
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->create()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+ERROR - 2026-05-21 15:00:27 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'db_perpus0', 3306, '', 0)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#13 {main}
+CRITICAL - 2026-05-21 15:00:27 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: api/pengguna]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `pengguna`
+WHERE `role` = :role:', [...], false)
+ 3 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+ERROR - 2026-05-21 15:00:32 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'db_perpus0', 3306, '', 0)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#13 {main}
+CRITICAL - 2026-05-21 15:00:32 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: api/pengguna]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `pengguna`
+WHERE `role` = :role:', [...], false)
+ 3 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+ERROR - 2026-05-21 15:00:36 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'db_perpus0', 3306, '', 0)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#12 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#13 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#14 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#13 {main}
+CRITICAL - 2026-05-21 15:00:36 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: api/pengguna]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `pengguna`
+WHERE `role` = :role:', [...], false)
+ 3 SYSTEMPATH\Model.php(253): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 5 APPPATH\Controllers\PenggunaController.php(21): CodeIgniter\BaseModel->findAll()
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\PenggunaController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\PenggunaController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+ERROR - 2026-05-21 15:35:56 --> Cannot add or update a child row: a foreign key constraint fails (`db_perpus0`.`buku`, CONSTRAINT `FK_buku_kategori` FOREIGN KEY (`kategoriID`) REFERENCES `kategori` (`kategoriID`) ON DELETE SET NULL ON UPDATE CASCADE)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (:kategoriID:, :judul_buku:, :penulis:, :penerbit:, :tahun_terbit:, :isbn:, :cover:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(899): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(668): CodeIgniter\BaseModel->insert([...], true)
+ 8 APPPATH\Controllers\BukuController.php(76): CodeIgniter\Model->insert([...])
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->create()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+CRITICAL - 2026-05-21 15:35:56 --> CodeIgniter\Database\Exceptions\DatabaseException: Cannot add or update a child row: a foreign key constraint fails (`db_perpus0`.`buku`, CONSTRAINT `FK_buku_kategori` FOREIGN KEY (`kategoriID`) REFERENCES `kategori` (`kategoriID`) ON DELETE SET NULL ON UPDATE CASCADE)
+[Method: POST, Route: api/buku]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (:kategoriID:, :judul_buku:, :penulis:, :penerbit:, :tahun_terbit:, :isbn:, :cover:, :created_at:, :updated_at:)', [...], false)
+ 2 SYSTEMPATH\Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 3 SYSTEMPATH\BaseModel.php(899): CodeIgniter\Model->doInsert([...])
+ 4 SYSTEMPATH\Model.php(668): CodeIgniter\BaseModel->insert([...], true)
+ 5 APPPATH\Controllers\BukuController.php(76): CodeIgniter\Model->insert([...])
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->create()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+CRITICAL - 2026-05-21 15:35:56 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Cannot add or update a child row: a foreign key constraint fails (`db_perpus0`.`buku`, CONSTRAINT `FK_buku_kategori` FOREIGN KEY (`kategoriID`) REFERENCES `kategori` (`kategoriID`) ON DELETE SET NULL ON UPDATE CASCADE)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (:kategoriID:, :judul_buku:, :penulis:, :penerbit:, :tahun_terbit:, :isbn:, :cover:, :created_at:, :updated_at:)', [...], false)
+ 4 SYSTEMPATH\Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 5 SYSTEMPATH\BaseModel.php(899): CodeIgniter\Model->doInsert([...])
+ 6 SYSTEMPATH\Model.php(668): CodeIgniter\BaseModel->insert([...], true)
+ 7 APPPATH\Controllers\BukuController.php(76): CodeIgniter\Model->insert([...])
+ 8 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->create()
+ 9 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+10 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+14 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+CRITICAL - 2026-05-21 15:35:56 --> [Caused by] mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`db_perpus0`.`buku`, CONSTRAINT `FK_buku_kategori` FOREIGN KEY (`kategoriID`) REFERENCES `kategori` (`kategoriID`) ON DELETE SET NULL ON UPDATE CASCADE)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (\'undefined\', \'Bumi Manusia\', \' Pramoedya Ananta Toer\', \'Gramedia\', \'1980-07-25\', NULL, \'1779377756_b1e3ceaf9596988ae46f.png\', \'2026-05-21 15:35:56\', \'2026-05-21 15:35:56\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `buku` (`kategoriID`, `judul_buku`, `penulis`, `penerbit`, `tahun_terbit`, `isbn`, `cover`, `created_at`, `updated_at`) VALUES (:kategoriID:, :judul_buku:, :penulis:, :penerbit:, :tahun_terbit:, :isbn:, :cover:, :created_at:, :updated_at:)', [...], false)
+ 5 SYSTEMPATH\Model.php(355): CodeIgniter\Database\BaseBuilder->insert()
+ 6 SYSTEMPATH\BaseModel.php(899): CodeIgniter\Model->doInsert([...])
+ 7 SYSTEMPATH\Model.php(668): CodeIgniter\BaseModel->insert([...], true)
+ 8 APPPATH\Controllers\BukuController.php(76): CodeIgniter\Model->insert([...])
+ 9 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->create()
+10 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+11 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+15 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')

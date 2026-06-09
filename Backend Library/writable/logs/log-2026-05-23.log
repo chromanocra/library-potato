@@ -1,0 +1,92 @@
+ERROR - 2026-05-23 12:49:18 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'db_perpus0', 3306, '', 0)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `buku`.*...', Array, false)
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\BukuController.php(20): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\BukuController->index()
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `buku`.*...', Array, false)
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\BukuController.php(20): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\BukuController->index()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+CRITICAL - 2026-05-23 12:49:18 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: api/buku]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `buku`.*, `kategori`.`nama_kategori`
+FROM `buku`
+LEFT JOIN `kategori` ON `kategori`.`kategoriID` = `buku`.`kategoriID`', [], false)
+ 3 APPPATH\Controllers\BukuController.php(20): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
+ERROR - 2026-05-23 12:49:24 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'db_perpus0', 3306, '', 0)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `buku`.*...', Array, false)
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\BukuController.php(20): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\BukuController->index()
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\libraryCI4\Backend Library\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `buku`.*...', Array, false)
+#3 C:\xampp\htdocs\libraryCI4\Backend Library\app\Controllers\BukuController.php(20): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(951): App\Controllers\BukuController->index()
+#5 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+#6 C:\xampp\htdocs\libraryCI4\Backend Library\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\libraryCI4\Backend Library\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\libraryCI4\Backend Library\public\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\libraryCI4\Backend Library\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+CRITICAL - 2026-05-23 12:49:24 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: GET, Route: api/buku]
+in SYSTEMPATH\Database\BaseConnection.php on line 606.
+ 1 SYSTEMPATH\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `buku`.*, `kategori`.`nama_kategori`
+FROM `buku`
+LEFT JOIN `kategori` ON `kategori`.`kategoriID` = `buku`.`kategoriID`', [], false)
+ 3 APPPATH\Controllers\BukuController.php(20): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\BukuController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BukuController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(70): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\libraryCI4\\Backend Library\\public\\index.php')
