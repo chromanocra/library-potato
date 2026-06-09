@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan AI - Fapus</title>
+
+    <link rel="icon" href="../../images/s.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f4fcf7; display: flex; height: 100vh; overflow: hidden; }
+
+        /* ── Sidebar ─────────────────────────────────────────────────────────── */
+        .sidebar { width: 260px; background-color: #16a34a; color: white; display: flex; flex-direction: column; transition: all 0.3s; flex-shrink: 0; }
+        .sidebar-header { padding: 24px; text-align: center; font-size: 24px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 1px; }
+        .sidebar-menu { flex: 1; padding: 20px 0; list-style: none; }
+        .sidebar-menu li { padding: 15px 25px; transition: 0.3s; }
+        .sidebar-menu li a { color: white; text-decoration: none; font-size: 16px; display: flex; align-items: center; gap: 15px; }
+        .sidebar-menu li:hover, .sidebar-menu li.active { background-color: #15803d; border-left: 5px solid #fff; }
+        .logout-btn { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .logout-btn a { color: white; text-decoration: none; display: flex; align-items: center; gap: 10px; padding: 10px; background-color: #dc2626; border-radius: 8px; justify-content: center; transition: 0.3s; }
+        .logout-btn a:hover { background-color: #b91c1c; }
+
+        /* ── Main ────────────────────────────────────────────────────────────── */
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        .topbar { background-color: #fff; height: 70px; padding: 0 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .topbar .user-info { display: flex; align-items: center; gap: 15px; color: #333; font-weight: 500; }
+        .topbar .user-info i { font-size: 24px; color: #16a34a; }
+        .content { padding: 30px; }
+
+        /* ── Kartu Kontrol ───────────────────────────────────────────────────── */
+        .control-card {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            border-radius: 16px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(22,163,74,0.25);
+        }
+        .control-card h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .control-card p  { opacity: 0.85; font-size: 14px; margin: 0; }
+
+        .form-select-custom, .btn-generate {
+            height: 46px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .form-select-custom { border: 2px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); color: white; }
+        .form-select-custom option { color: #111; background: #fff; }
+        .form-select-custom:focus { border-color: #fff; box-shadow: none; background: rgba(255,255,255,0.2); }
+        .btn-generate {
+            background-color: #fff;
+            color: #16a34a;
+            border: none;
+            font-weight: 700;
+            padding: 0 28px;
+            transition: 0.3s;
+        }
+        .btn-generate:hover:not(:disabled) { background-color: #f0fdf4; color: #15803d; transform: translateY(-1px); }
+        .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        /* ── Stats Strip ─────────────────────────────────────────────────────── */
+        .stats-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-chip { background: #fff; border-radius: 12px; padding: 18px 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border-bottom: 3px solid #16a34a; }
+        .stat-chip .stat-icon { width: 44px; height: 44px; border-radius: 10px; background: #f0fdf4; color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .stat-chip .stat-val  { font-size: 22px; font-weight: 700; color: #16a34a; line-height: 1; }
+        .stat-chip .stat-lbl  { font-size: 11px; color: #6b7280; text-transform: uppercase; font-weight: 600; margin-top: 2px; }
+
+        /* ── Spinner ─────────────────────────────────────────────────────────── */
+        #loadingSpinner { display: none; }
+        .spinner-ring { width: 60px; height: 60px; border: 5px solid #d1fae5; border-top-color: #16a34a; border-radius: 50%; animation: spin 0.9s linear infinite; margin: 0 auto 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Hasil AI ────────────────────────────────────────────────────────── */
+        #aiResultCard { display: none; }
+        .ai-result-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            line-height: 1.75;
+            color: #1f2937;
+        }
+        .ai-result-box h3 { color: #16a34a; font-size: 18px; margin-top: 20px; margin-bottom: 8px; }
+        .ai-result-box h4 { color: #374151; font-size: 16px; margin-top: 16px; margin-bottom: 6px; }
+        .ai-result-box p  { margin-bottom: 10px; }
+        .ai-result-box ul, .ai-result-box ol { padding-left: 22px; margin-bottom: 12px; }
+        .ai-result-box li { margin-bottom: 6px; }
+        .ai-result-box hr { border-color: #e5e7eb; margin: 20px 0; }
+        .ai-result-box strong { color: #111827; }
+
+        .result-header {
+            display: flex; align-items: center; justify-content: space-between;
+            background: #f0fdf4; border-radius: 10px; padding: 14px 20px;
+            margin-bottom: 20px; border-left: 4px solid #16a34a;
+        }
+        .result-header h5 { margin: 0; color: #15803d; font-weight: 700; }
+        .copy-btn { font-size: 13px; }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header"><i class="fas fa-book-reader"></i> FAPUS</div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard_admin.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="buku.html"><i class="fas fa-book"></i> Data Buku</a></li>
+            <li><a href="kategori.html"><i class="fas fa-tags"></i> Data Kategori</a></li>
+            <li><a href="akunUser.html"><i class="fas fa-users"></i> Data Anggota</a></li>
+            <li><a href="peminjaman.html"><i class="fas fa-exchange-alt"></i> Peminjaman</a></li>
+            <li class="active"><a href="laporan.html"><i class="fas fa-robot"></i> Laporan AI</a></li>
+        </ul>
+        <div class="logout-btn">
+            <a href="#" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div></div>
+            <div class="user-info">
+                <span id="adminName">Admin</span>
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </header>
+
+        <section class="content">
+
+            <!-- ── Kartu Kontrol ───────────────────────────────────────────────── -->
+            <div class="control-card">
+                <div class="row align-items-center gy-3">
+                    <div class="col-lg-5">
+                        <h2><i class="fas fa-robot me-2"></i>Laporan AI Perpustakaan</h2>
+                        <p>Pilih periode lalu biarkan AI menganalisis tren dan memberikan rekomendasi strategis.</p>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap gap-2 align-items-center justify-content-lg-end">
+                            <select id="selectBulan" class="form-select form-select-custom" style="width:160px;">
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+                            <select id="selectTahun" class="form-select form-select-custom" style="width:120px;">
+                            </select>
+                            <button id="btnGenerate" class="btn btn-generate">
+                                <i class="fas fa-magic me-2"></i>Generate AI Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Strip Statistik ─────────────────────────────────────────────── -->
+            <div class="stats-strip" id="statsStrip" style="display:none !important;">
+                <div class="stat-chip">
+                    <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                    <div>
+                        <div class="stat-val" id="stat-total">0</div>
+                        <div class="stat-lbl">Total Transaksi</div>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <div>
+                        <div class="stat-val" id="stat-denda">0</div>
+                        <div class="stat-lbl">Harga Terkumpul</div>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                    <div>
+                        <div class="stat-val" id="stat-topbuku">-</div>
+                        <div class="stat-lbl">Buku Terpopuler</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Spinner ─────────────────────────────────────────────────────── -->
+            <div id="loadingSpinner" class="text-center py-5">
+                <div class="spinner-ring"></div>
+                <p class="text-success fw-semibold">AI sedang menganalisis data perpustakaan...</p>
+                <p class="text-muted small">Proses ini membutuhkan 5–15 detik</p>
+            </div>
+
+            <!-- ── Hasil AI ─────────────────────────────────────────────────────── -->
+            <div id="aiResultCard">
+                <div class="result-header">
+                    <h5><i class="fas fa-robot me-2"></i>Ringkasan Eksekutif AI — <span id="resultPeriode"></span></h5>
+                    <button class="btn btn-outline-success btn-sm copy-btn" onclick="copyResult()">
+                        <i class="fas fa-copy me-1"></i>Salin
+                    </button>
+                </div>
+                <div class="ai-result-box" id="aiResultBody">
+                    <!-- Konten HTML dari Gemini dirender di sini -->
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        // ── Inisialisasi halaman ────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const session = localStorage.getItem('user_logged_in');
+            if (!session) {
+                alert('Akses ditolak! Silakan login.');
+                window.location.href = '../../Login/login.html';
+                return;
+            }
+            const dataUser = JSON.parse(session);
+            if (dataUser.role !== 'admin') {
+                alert('Halaman ini hanya untuk Admin.');
+                window.location.href = '../../Index Utama/index.html';
+                return;
+            }
+            document.getElementById('adminName').innerText = `Halo, ${dataUser.username || 'Admin'}`;
+
+            // Isi dropdown tahun (5 tahun ke belakang + tahun ini)
+            const now = new Date();
+            const tahunSekarang = now.getFullYear();
+            const selectTahun = document.getElementById('selectTahun');
+            for (let t = tahunSekarang; t >= tahunSekarang - 4; t--) {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.textContent = t;
+                selectTahun.appendChild(opt);
+            }
+
+            // Set default ke bulan & tahun saat ini
+            document.getElementById('selectBulan').value = now.getMonth() + 1;
+            document.getElementById('selectTahun').value = tahunSekarang;
+
+            // Event: generate
+            document.getElementById('btnGenerate').addEventListener('click', generateReport);
+
+            // Logout
+            document.getElementById('btnLogout').addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('Yakin ingin keluar?')) {
+                    localStorage.removeItem('user_logged_in');
+                    window.location.href = '../../Index Utama/index.html';
+                }
+            });
+        });
+
+        // ── Generate AI Report ──────────────────────────────────────────────────
+        async function generateReport() {
+            const bulan = parseInt(document.getElementById('selectBulan').value);
+            const tahun = parseInt(document.getElementById('selectTahun').value);
+            const btn   = document.getElementById('btnGenerate');
+
+            // Tampilkan spinner, sembunyikan hasil lama
+            document.getElementById('loadingSpinner').style.display  = 'block';
+            document.getElementById('aiResultCard').style.display    = 'none';
+            document.getElementById('statsStrip').style.display      = 'none';
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Menganalisis...';
+
+            try {
+                const response = await fetch(`${API_BASE}/laporan/ai`, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ bulan, tahun }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.messages?.error || data.pesan || 'Terjadi kesalahan pada server.');
+                }
+
+                // ── Isi strip statistik ─────────────────────────────────────────
+                const stats = data.statistics || {};
+                document.getElementById('stat-total').innerText = (stats.total_peminjaman || 0).toLocaleString('id-ID');
+                document.getElementById('stat-denda').innerText = 'Rp ' + ((stats.total_denda || 0)).toLocaleString('id-ID');
+                document.getElementById('stat-topbuku').innerText =
+                    stats.top_buku && stats.top_buku.length > 0
+                        ? stats.top_buku[0].judul_buku.split(' ').slice(0, 3).join(' ') + '...'
+                        : '-';
+
+                // ── Tampilkan hasil AI ──────────────────────────────────────────
+                document.getElementById('resultPeriode').innerText = `${data.bulan} ${data.tahun}`;
+                document.getElementById('aiResultBody').innerHTML  = data.ai_summary || '<p>Tidak ada respons.</p>';
+
+                document.getElementById('statsStrip').style.removeProperty('display');
+                document.getElementById('statsStrip').style.display   = 'grid';
+                document.getElementById('aiResultCard').style.display = 'block';
+
+                // Scroll ke hasil
+                document.getElementById('aiResultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            } catch (err) {
+                document.getElementById('aiResultCard').style.display = 'block';
+                document.getElementById('aiResultBody').innerHTML =
+                    `<div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Gagal generate laporan:</strong> ${err.message}
+                        <br><small class="mt-1 d-block">Pastikan: (1) Backend CI4 berjalan, (2) GEMINI_API_KEY sudah diisi di file <code>.env</code></small>
+                    </div>`;
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate AI Report';
+            }
+        }
+
+        // ── Salin hasil ke clipboard ────────────────────────────────────────────
+        function copyResult() {
+            const text = document.getElementById('aiResultBody').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fas fa-check me-1"></i>Tersalin!';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-copy me-1"></i>Salin', 2000);
+            });
+        }
+    </script>
+
+</body>
+</html>

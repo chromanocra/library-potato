@@ -36,12 +36,32 @@ $routes->group("api", function ($routes) {
     // TAMBAHKAN DUA BARIS INI UNTUK EDIT DAN HAPUS
     $routes->put("pengguna/(:num)", "PenggunaController::update/$1");
     $routes->delete("pengguna/(:num)", "PenggunaController::delete/$1");
+    // ── Suspend / Unsuspend user account ─────────────────────────────────────
+    $routes->put(
+        "pengguna/(:num)/suspend",
+        "PenggunaController::toggleSuspend/$1",
+    );
 
     $routes->get("denda", "DendaController::index"); // routes masuk ke method index() di DendaController untuk menampilkan semua denda
     $routes->post("denda", "DendaController::create"); // routes masuk ke method create() di DendaController untuk menambahkan denda baru
 
-    $routes->get("peminjaman", "PeminjamanController::index"); // routes masuk ke method index() di PeminjamanController untuk menampilkan semua peminjaman
-    $routes->post("peminjaman", "PeminjamanController::create"); // routes masuk ke method create() di Peminjaman
+    // ── Peminjaman — basis ────────────────────────────────────────────────────
+    $routes->get("peminjaman", "PeminjamanController::index");
+    $routes->post("peminjaman", "PeminjamanController::create");
+
+    // ── Peminjaman — Workflow Approval (letakkan SEBELUM :num generik) ────────
+    $routes->get(
+        "peminjaman/user/(:any)",
+        "PeminjamanController::userHistory/$1",
+    );
+    $routes->put(
+        "peminjaman/(:num)/approve",
+        "PeminjamanController::approve/$1",
+    );
+    $routes->put("peminjaman/(:num)/reject", "PeminjamanController::reject/$1");
+
+    // ── Laporan AI ────────────────────────────────────────────────────────────
+    $routes->post("laporan/ai", "LaporanController::generateAI");
 
     $routes->get("stok", "StokController::index"); // routes masuk ke method index() di StokController untuk menampilkan semua stok
     $routes->post("stok", "StokController::create"); // routes masuk ke method create() di

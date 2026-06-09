@@ -12,8 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const dataUser = JSON.parse(sessionUser);
 
-  // Gunakan nomor_identitas / username / id sesuai dengan struktur PenggunaController kamu
-  const userID = dataUser.nomor_identitas || dataUser.username || dataUser.id;
+  // Gunakan integer primary key userID untuk FK yang benar di tabel peminjaman.
+  // dataUser.userID adalah kolom PK dari tabel pengguna yang dikembalikan saat login.
+  const userID = dataUser.userID || dataUser.id;
   document.getElementById("userID").value = userID;
 
   // 2. Ambil Parameter dari URL (Mendukung 'id_buku' ATAU 'judul')
