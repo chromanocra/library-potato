@@ -183,10 +183,8 @@ async function loadPeminjaman() {
   }
 
   if (data.length === 0) {
-    tbody.innerHTML = `
-            <tr><td colspan="9" class="text-center py-4 text-muted">
-                <i class="fas fa-inbox me-2"></i>Belum ada data peminjaman.
-            </td></tr>`;
+    tbody.innerHTML = "";
+    initDataTable();
     return;
   }
 

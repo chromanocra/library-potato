@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'user_logged_in',
                     JSON.stringify({
                         username: dataUser.username || username,
+                        userID: dataUser.userID || dataUser.id || '',
                         nomor_identitas: dataUser.nomor_identitas || '',
                         role: userRole.toLowerCase() // disamakan jadi huruf kecil biar aman
                     })

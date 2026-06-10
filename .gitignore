@@ -1,0 +1,9 @@
+Backend Library/writable/logs/*
+Backend Library/writable/cache/*
+Backend Library/writable/session/*
+Backend Library/public/uploads/cover/*
+!Backend Library/public/uploads/cover/default.jpg
+!Backend Library/writable/logs/index.html
+!Backend Library/writable/cache/index.html
+!Backend Library/writable/session/index.html
+!Backend Library/public/uploads/cover/index.html

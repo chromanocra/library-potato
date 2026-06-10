@@ -74,6 +74,20 @@ class BukuController extends ResourceController
         // Catatan: jml_halaman, deskripsi, isi_buku diabaikan karena tidak ada di database
 
         if ($this->model->insert($data)) {
+            $bukuID = $this->model->getInsertID();
+            
+            // Insert default stock (10 copies for example)
+            $db = \Config\Database::connect();
+            $db->table('stok')->insert([
+                'bukuID'        => $bukuID,
+                'total_copy'    => 10,
+                'avail_copy'    => 10,
+                'borrowed_copy' => 0,
+                'reserved_copy' => 0,
+                'damaged_copy'  => 0,
+                'lost_copy'     => 0
+            ]);
+
             return $this->respondCreated(['status' => 201, 'pesan' => 'Buku berhasil ditambahkan']);
         }
         return $this->fail($this->model->errors());

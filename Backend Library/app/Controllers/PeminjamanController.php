@@ -19,7 +19,7 @@ class PeminjamanController extends ResourceController
             ->query(
                 "
             SELECT
-                p.peminjamanID   AS pinjamID,
+                p.pinjamID   AS pinjamID,
                 p.userID,
                 p.tanggal_pinjam,
                 p.batas_kembali,
@@ -36,9 +36,9 @@ class PeminjamanController extends ResourceController
                 SELECT pinjamID, MIN(bukuID) AS bukuID
                 FROM   detail
                 GROUP  BY pinjamID
-            ) d ON p.peminjamanID = d.pinjamID
+            ) d ON p.pinjamID = d.pinjamID
             LEFT JOIN buku b ON d.bukuID = b.bukuID
-            ORDER BY p.peminjamanID DESC
+            ORDER BY p.pinjamID DESC
         ",
             )
             ->getResultArray();
@@ -61,7 +61,7 @@ class PeminjamanController extends ResourceController
             ->query(
                 "
             SELECT
-                p.peminjamanID   AS pinjamID,
+                p.pinjamID   AS pinjamID,
                 p.tanggal_pinjam,
                 p.batas_kembali,
                 p.tanggal_kembali,
@@ -77,10 +77,10 @@ class PeminjamanController extends ResourceController
                 SELECT pinjamID, MIN(bukuID) AS bukuID
                 FROM   detail
                 GROUP  BY pinjamID
-            ) d ON p.peminjamanID = d.pinjamID
+            ) d ON p.pinjamID = d.pinjamID
             LEFT JOIN buku b ON d.bukuID = b.bukuID
             WHERE p.userID = ?
-            ORDER BY p.peminjamanID DESC
+            ORDER BY p.pinjamID DESC
         ",
                 [$userID],
             )
@@ -151,7 +151,11 @@ class PeminjamanController extends ResourceController
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            return $this->fail("Gagal menyimpan peminjaman", 500);
+            $errorDB = $db->error();
+            $errorModel = $this->model->errors();
+            $errorDetail = $detailModel->errors();
+            $errorStok = $stokModel->errors();
+            return $this->fail("Gagal menyimpan peminjaman: DB " . json_encode($errorDB) . " | pinjamID: " . $pinjamID . " | Peminjaman " . json_encode($errorModel) . " | Detail " . json_encode($errorDetail) . " | Stok " . json_encode($errorStok), 500);
         }
 
         return $this->respondCreated([

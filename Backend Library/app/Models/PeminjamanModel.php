@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 class PeminjamanModel extends Model
 {
     protected $table = "peminjaman";
-    protected $primaryKey = "peminjamanID";
+    protected $primaryKey = "pinjamID";
     protected $useAutoIncrement = true;
 
     // Sesuaikan nama kolom ini dengan yang ada di database lu
