@@ -57,34 +57,38 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       const localBatasKembali = new Date(
         internalBatasKembali.getTime() -
-          internalBatasKembali.getTimezoneOffset() * 60000,
+        internalBatasKembali.getTimezoneOffset() * 60000,
       );
       const sqlBatasKembali =
         localBatasKembali.toISOString().slice(0, 16).replace("T", " ") + ":00";
 
       // ── FITUR 1: Payload disesuaikan dengan format yang diharapkan PeminjamanController
       // id_buku di form berisi nilai bukuID (sudah di-map oleh BukuController)
+      // const payload = {
+      //   userID: document.getElementById("userID").value,
+      //   batas_kembali: sqlBatasKembali,
+      //   buku_yang_dipinjam: [
+      //     {
+      //       bukuID: document.getElementById("id_buku").value,
+      //       qty: 1,
+      //     },
+      //   ],
+      // };
       const payload = {
         userID: document.getElementById("userID").value,
-        batas_kembali: sqlBatasKembali,
-        buku_yang_dipinjam: [
-          {
-            bukuID: document.getElementById("id_buku").value,
-            qty: 1,
-          },
-        ],
+        bukuID: document.getElementById("id_buku").value,
       };
 
       try {
-        const response = await fetch(`${API_URL}/peminjaman`, {
+        const response = await fetch(`${API_URL}/reservasi`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
 
         if (response.ok) {
-          alert("Buku Berhasil diPinjam!");
-          window.location.href = "daftar_pinjam.html";
+          alert("Reservasi Buku Berhasil Diajukan!");
+          window.location.href = "reservasi.html";
         } else {
           // ── FITUR 1: Tangkap error 400 stok habis dari server
           const result = await response.json();
@@ -95,10 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Pesan umum dari error lain
             alert(
               "Gagal: " +
-                (result.messages?.error ||
-                  result.pesan ||
-                  result.message ||
-                  "Terjadi kesalahan pada server."),
+              (result.messages?.error ||
+                result.pesan ||
+                result.message ||
+                "Terjadi kesalahan pada server."),
             );
           }
         }

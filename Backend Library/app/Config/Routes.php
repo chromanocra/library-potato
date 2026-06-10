@@ -68,4 +68,15 @@ $routes->group("api", function ($routes) {
 
     // ── FITUR 2: Analytics Dashboard ─────────────────────────────────────────
     $routes->get("analytics", "AnalyticsController::index");
+
+    // ── FITUR 3: Reservasi Buku ───────────────────────────────────────────────
+    $routes->get('api/reservasi', 'ReservasiController::index');
+
+    $routes->post('api/reservasi', 'ReservasiController::create');
+
+    $routes->put('api/reservasi/(:num)/approve', 'ReservasiController::approve/$1');
+
+    $routes->put('api/reservasi/(:num)/reject', 'ReservasiController::reject/$1');
+
+    $routes->get('api/reservasi/user/(:num)', 'ReservasiController::userHistory/$1');
 });

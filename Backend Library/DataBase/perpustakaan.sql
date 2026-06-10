@@ -18,6 +18,7 @@
 --
 -- Table structure for table `buku`
 --
+SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `buku`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -36,7 +37,7 @@ CREATE TABLE `buku` (
   UNIQUE KEY `isbn` (`isbn`),
   KEY `FK_buku_kategori` (`kategoriID`),
   CONSTRAINT `FK_buku_kategori` FOREIGN KEY (`kategoriID`) REFERENCES `kategori` (`kategoriID`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +67,7 @@ CREATE TABLE `denda` (
   PRIMARY KEY (`dendaID`),
   KEY `FK_denda_pinjam` (`pinjamID`),
   CONSTRAINT `FK_denda_pinjam` FOREIGN KEY (`pinjamID`) REFERENCES `peminjaman` (`pinjamID`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +98,7 @@ CREATE TABLE `detail` (
   KEY `FK_detail_buku` (`bukuID`),
   CONSTRAINT `FK_detail_buku` FOREIGN KEY (`bukuID`) REFERENCES `buku` (`bukuID`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_detail_pinjam` FOREIGN KEY (`pinjamID`) REFERENCES `peminjaman` (`pinjamID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +124,7 @@ CREATE TABLE `kategori` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`kategoriID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +156,7 @@ CREATE TABLE `peminjaman` (
   PRIMARY KEY (`pinjamID`),
   KEY `FK_peminjaman_user` (`userID`),
   CONSTRAINT `FK_peminjaman_user` FOREIGN KEY (`userID`) REFERENCES `pengguna` (`userID`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -189,7 +190,7 @@ CREATE TABLE `pengguna` (
   UNIQUE KEY `nomor_identitas` (`nomor_identitas`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -222,7 +223,7 @@ CREATE TABLE `reservasi` (
   KEY `FK_reservasi_buku` (`bukuID`),
   CONSTRAINT `FK_reservasi_buku` FOREIGN KEY (`bukuID`) REFERENCES `buku` (`bukuID`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `FK_reservasi_user` FOREIGN KEY (`userID`) REFERENCES `pengguna` (`userID`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -255,8 +256,10 @@ CREATE TABLE `stok` (
   PRIMARY KEY (`stokID`),
   UNIQUE KEY `bukuID` (`bukuID`),
   CONSTRAINT `FK_stok_buku` FOREIGN KEY (`bukuID`) REFERENCES `buku` (`bukuID`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 --
 -- Dumping data for table `stok`

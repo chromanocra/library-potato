@@ -8,7 +8,7 @@ use App\Models\BukuModel;
 class BukuController extends ResourceController
 {
     protected $modelName = 'App\Models\BukuModel';
-    protected $format    = 'json'; 
+    protected $format    = 'json';
 
     // 1. Endpoint: GET /api/buku (Menampilkan semua buku)
     public function index()
@@ -18,10 +18,10 @@ class BukuController extends ResourceController
         $builder->select('buku.*, kategori.nama_kategori');
         $builder->join('kategori', 'kategori.kategoriID = buku.kategoriID', 'left');
         $query   = $builder->get();
-        $data    = $query->getResultArray(); 
-        
+        $data    = $query->getResultArray();
+
         // Memformat output agar sesuai dengan yang dibaca oleh Javascript di frontend
-        $formattedData = array_map(function($item) {
+        $formattedData = array_map(function ($item) {
             return [
                 'id_buku'    => $item['bukuID'], // JS membaca 'id_buku'
                 'judul'      => $item['judul_buku'], // JS membaca 'judul'
@@ -29,7 +29,7 @@ class BukuController extends ResourceController
                 'penerbit'   => $item['penerbit'],
                 'thn_terbit' => $item['tahun_terbit'],
                 'kategori'   => $item['nama_kategori'] ?? '-',
-                'id_kategori'=> $item['kategoriID'],
+                'id_kategori' => $item['kategoriID'],
                 'cover'      => $item['cover']
             ];
         }, $data);
@@ -50,34 +50,37 @@ class BukuController extends ResourceController
     // 3. Endpoint: POST /api/buku (Menambahkan buku baru)
     public function create()
     {
-        // Menggunakan getPost() karena data dikirim via FormData (multipart/form-data)
         $data = [
-            'kategoriID'   => $this->request->getPost('kategori'),
+            'kategoriID'   => $this->request->getPost('kategoriID') ?: $this->request->getPost('kategori'),
             'judul_buku'   => $this->request->getPost('judul'),
             'penulis'      => $this->request->getPost('pengarang'),
             'penerbit'     => $this->request->getPost('penerbit'),
             'tahun_terbit' => $this->request->getPost('thn_terbit'),
-            // isbn bisa diisi null atau generate otomatis jika tidak ada di form
-            'isbn'         => null 
+            'isbn'         => $this->request->getPost('isbn')
         ];
 
-        // Proses Upload Cover
         $fileCover = $this->request->getFile('cover');
+
         if ($fileCover && $fileCover->isValid() && !$fileCover->hasMoved()) {
             $coverName = $fileCover->getRandomName();
+
+            if (!is_dir(FCPATH . 'uploads/cover')) {
+                mkdir(FCPATH . 'uploads/cover', 0777, true);
+            }
+
             $fileCover->move(FCPATH . 'uploads/cover', $coverName);
+
             $data['cover'] = $coverName;
         } else {
-            $data['cover'] = 'default.jpg'; // Sesuai default di database Anda
+            $data['cover'] = 'default.jpg';
         }
 
-        // Catatan: jml_halaman, deskripsi, isi_buku diabaikan karena tidak ada di database
-
         if ($this->model->insert($data)) {
+
             $bukuID = $this->model->getInsertID();
-            
-            // Insert default stock (10 copies for example)
+
             $db = \Config\Database::connect();
+
             $db->table('stok')->insert([
                 'bukuID'        => $bukuID,
                 'total_copy'    => 10,
@@ -88,9 +91,17 @@ class BukuController extends ResourceController
                 'lost_copy'     => 0
             ]);
 
-            return $this->respondCreated(['status' => 201, 'pesan' => 'Buku berhasil ditambahkan']);
+            return $this->respondCreated([
+                'status' => true,
+                'pesan'  => 'Buku berhasil ditambahkan'
+            ]);
         }
-        return $this->fail($this->model->errors());
+
+        return $this->respond([
+            'status' => false,
+            'errors' => $this->model->errors(),
+            'data'   => $data
+        ], 400);
     }
 
     // 4. Endpoint: POST /api/buku/(:num) (Mengubah data buku)
@@ -103,11 +114,12 @@ class BukuController extends ResourceController
         }
 
         $data = [
-            'kategoriID'   => $this->request->getPost('kategori'),
+            'kategoriID'   => $this->request->getPost('kategoriID') ?: $this->request->getPost('kategori'),
             'judul_buku'   => $this->request->getPost('judul'),
             'penulis'      => $this->request->getPost('pengarang'),
             'penerbit'     => $this->request->getPost('penerbit'),
             'tahun_terbit' => $this->request->getPost('thn_terbit'),
+            'isbn'         => $this->request->getPost('isbn')
         ];
 
         // Proses Update Cover (Opsional)
@@ -116,7 +128,7 @@ class BukuController extends ResourceController
             $coverName = $fileCover->getRandomName();
             $fileCover->move(FCPATH . 'uploads/cover', $coverName);
             $data['cover'] = $coverName;
-            
+
             // Hapus cover lama jika bukan default
             if (!empty($bukuLama['cover']) && $bukuLama['cover'] !== 'default.jpg' && file_exists(FCPATH . 'uploads/cover/' . $bukuLama['cover'])) {
                 unlink(FCPATH . 'uploads/cover/' . $bukuLama['cover']);

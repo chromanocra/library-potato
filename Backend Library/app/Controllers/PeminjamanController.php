@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use CodeIgniter\RESTful\ResourceController;
 
 class PeminjamanController extends ResourceController
@@ -94,77 +95,12 @@ class PeminjamanController extends ResourceController
     // ─────────────────────────────────────────────────────────────────────────
     public function create()
     {
-        $db = \Config\Database::connect();
-        $data = $this->request->getJSON();
-
-        if (
-            !isset($data->userID) ||
-            !isset($data->batas_kembali) ||
-            !isset($data->buku_yang_dipinjam)
-        ) {
-            return $this->fail(
-                "Data userID, batas_kembali, dan buku_yang_dipinjam wajib diisi",
-                400,
-            );
-        }
-
-        // Validasi stok sebelum memulai transaksi DB
-        $stokModel = new \App\Models\StokModel();
-        foreach ($data->buku_yang_dipinjam as $buku) {
-            $stok = $stokModel->where("bukuID", $buku->bukuID)->first();
-            if (!$stok || (int) $stok["avail_copy"] <= 0) {
-                return $this->response->setStatusCode(400)->setJSON([
-                    "error" => "Stok buku tidak tersedia / sedang dipinjam",
-                ]);
-            }
-        }
-
-        $db->transStart();
-
-        // Simpan header peminjaman — status Pending, denda = 0
-        $this->model->insert([
-            "userID" => $data->userID,
-            "batas_kembali" => $data->batas_kembali,
-            "status" => "Pending",
-            "total_denda" => 0,
-        ]);
-        $pinjamID = $this->model->getInsertID();
-
-        $detailModel = new \App\Models\DetailModel();
-        foreach ($data->buku_yang_dipinjam as $buku) {
-            $qty = isset($buku->qty) ? (int) $buku->qty : 1;
-
-            $detailModel->insert([
-                "pinjamID" => $pinjamID,
-                "bukuID" => $buku->bukuID,
-                "qty" => $qty,
-            ]);
-
-            // Reservasi stok (sementara dikurangi; dipulihkan saat ditolak)
-            $stok = $stokModel->where("bukuID", $buku->bukuID)->first();
-            $stokModel->update($stok["stokID"], [
-                "avail_copy" => max(0, (int) $stok["avail_copy"] - $qty),
-                "borrowed_copy" => (int) $stok["borrowed_copy"] + $qty,
-            ]);
-        }
-
-        $db->transComplete();
-
-        if ($db->transStatus() === false) {
-            $errorDB = $db->error();
-            $errorModel = $this->model->errors();
-            $errorDetail = $detailModel->errors();
-            $errorStok = $stokModel->errors();
-            return $this->fail("Gagal menyimpan peminjaman: DB " . json_encode($errorDB) . " | pinjamID: " . $pinjamID . " | Peminjaman " . json_encode($errorModel) . " | Detail " . json_encode($errorDetail) . " | Stok " . json_encode($errorStok), 500);
-        }
-
-        return $this->respondCreated([
-            "status" => 201,
-            "pesan" => "Pengajuan berhasil! Menunggu persetujuan Admin.",
-            "pinjamID" => $pinjamID,
-        ]);
+        return $this->fail(
+            'Peminjaman tidak boleh dibuat langsung. Gunakan Reservasi.',
+            400
+        );
     }
-
+    
     // ─────────────────────────────────────────────────────────────────────────
     // PUT /api/peminjaman/{id}/approve  —  Admin menyetujui + set harga
     // ─────────────────────────────────────────────────────────────────────────
@@ -221,7 +157,7 @@ class PeminjamanController extends ResourceController
             if ($stok) {
                 $stokModel->update($stok["stokID"], [
                     "avail_copy" =>
-                        (int) $stok["avail_copy"] + (int) $detail["qty"],
+                    (int) $stok["avail_copy"] + (int) $detail["qty"],
                     "borrowed_copy" => max(
                         0,
                         (int) $stok["borrowed_copy"] - (int) $detail["qty"],
