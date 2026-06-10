@@ -43,7 +43,7 @@ class LaporanController extends ResourceController
             SELECT b.judul_buku, COUNT(d.bukuID) AS total_dipinjam
             FROM   detail d
             JOIN   buku        b  ON d.bukuID    = b.bukuID
-            JOIN   peminjaman  p  ON d.pinjamID  = p.peminjamanID
+            JOIN   peminjaman  p  ON d.pinjamID  = p.pinjamID
             WHERE  MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
             GROUP  BY d.bukuID, b.judul_buku
             ORDER  BY total_dipinjam DESC
@@ -59,7 +59,7 @@ class LaporanController extends ResourceController
 
         // 5. Top 3 peminjam paling aktif
         $topPeminjam = $db->query("
-            SELECT pg.username, pg.nomor_identitas, COUNT(p.peminjamanID) AS total_pinjam
+            SELECT pg.username, pg.nomor_identitas, COUNT(p.pinjamID) AS total_pinjam
             FROM   peminjaman p
             JOIN   pengguna   pg ON p.userID = pg.userID
             WHERE  MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
@@ -125,7 +125,7 @@ PROMPT;
             );
         }
 
-        $geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
+        $geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
 
         $requestBody = json_encode([
             'contents' => [
@@ -144,7 +144,8 @@ PROMPT;
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_POSTFIELDS     => $requestBody,
             CURLOPT_TIMEOUT        => 30,
-            CURLOPT_SSL_VERIFYPEER => false, // nonaktifkan hanya untuk dev lokal
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => 0,
         ]);
 
         $rawResponse = curl_exec($ch);

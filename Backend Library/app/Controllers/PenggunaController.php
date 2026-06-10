@@ -185,7 +185,7 @@ class PenggunaController extends ResourceController
         }
 
         // Cek apakah akun user sedang dinonaktifkan/suspend
-        if (isset($user["status"]) && $user["status"] === "suspended") {
+        if (isset($user["status"]) && $user["status"] === "inactive") {
             return $this->fail(
                 [
                     "status" => 403,
@@ -291,9 +291,9 @@ class PenggunaController extends ResourceController
 
     /**
      * PUT /api/pengguna/(:num)/suspend
-     * Toggle status akun: 'active' ↔ 'suspended'
-     * Jika status saat ini NULL atau 'active'  → set ke 'suspended'
-     * Jika status saat ini 'suspended'         → set ke 'active'
+     * Toggle status akun: 'active' ↔ 'inactive'
+     * Jika status saat ini NULL atau 'active'  → set ke 'inactive'
+     * Jika status saat ini 'inactive'         → set ke 'active'
      */
     public function toggleSuspend($id = null)
     {
@@ -313,14 +313,14 @@ class PenggunaController extends ResourceController
         }
 
         // Toggle status
-        $statusBaru = $user["status"] === "suspended" ? "active" : "suspended";
+        $statusBaru = $user["status"] === "inactive" ? "active" : "inactive";
 
         $model->update($id, ["status" => $statusBaru]);
 
         return $this->respond([
             "status" => 200,
             "pesan" =>
-                $statusBaru === "suspended"
+                $statusBaru === "inactive"
                     ? "Akun berhasil dinonaktifkan."
                     : "Akun berhasil diaktifkan kembali.",
             "status_baru" => $statusBaru,

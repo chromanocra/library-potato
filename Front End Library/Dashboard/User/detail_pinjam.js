@@ -111,6 +111,18 @@ document.addEventListener("DOMContentLoaded", () => {
           '<i class="fas fa-paper-plane me-2"></i> Ajukan Pinjaman';
       }
     });
+
+  // 4. Handle Logout
+  const btnLogout = document.getElementById("btnLogout");
+  if (btnLogout) {
+    btnLogout.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (confirm("Apakah Anda yakin ingin logout?")) {
+        localStorage.removeItem("user_logged_in");
+        window.location.href = "../../Login/login.html";
+      }
+    });
+  }
 });
 
 // FUNGSI JIKA MENCARI BERDASARKAN ID BUKU
@@ -172,10 +184,10 @@ function isiFormBuku(book) {
     this.src = "../../images/a.png";
   };
 
-  document.getElementById("id_buku").value = book.id_buku || "";
-  document.getElementById("kategori").value = book.kategori || "";
-  document.getElementById("judul").value = book.judul || "";
-  document.getElementById("pengarang").value = book.pengarang || "-";
+  document.getElementById("id_buku").value = book.id_buku || book.bukuID || book.id || "";
+  document.getElementById("kategori").value = book.kategori || book.nama_kategori || "";
+  document.getElementById("judul").value = book.judul || book.judul_buku || "";
+  document.getElementById("pengarang").value = book.pengarang || book.penulis || "-";
   document.getElementById("penerbit").value = book.penerbit || "-";
-  document.getElementById("thn_terbit").value = book.thn_terbit || "-";
+  document.getElementById("thn_terbit").value = book.thn_terbit || book.tahun_terbit || "-";
 }

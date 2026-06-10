@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // Ambil riwayat dari GET /api/peminjaman/user/{userID}
 // ─────────────────────────────────────────────────────────────────────────────
 async function loadHistoryUser(userID) {
-  const tbody = document.getElementById("tableHistoryBody");
+  const tbody = document.getElementById("tablePeminjamanBody");
+  if (!tbody) return;
 
   if (!userID) {
     tbody.innerHTML =
@@ -60,70 +61,55 @@ async function loadHistoryUser(userID) {
     let html = "";
 
     data.forEach((item, index) => {
-      // Cover buku
       const coverSrc =
         item.cover_buku && item.cover_buku !== "default.jpg"
           ? `http://localhost:8080/uploads/cover/${item.cover_buku}`
           : "../../images/a.png";
 
-      // ── Badge status ──────────────────────────────────────────────────
       let badgeHtml = "";
       const status = (item.status || "").toLowerCase();
       if (status === "pending") {
-        badgeHtml =
-          '<span class="badge-status badge-pending"><i class="fas fa-clock me-1"></i>Menunggu Persetujuan</span>';
+        badgeHtml = '<span class="badge-status badge-pending"><i class="fas fa-clock me-1"></i>Menunggu</span>';
       } else if (status === "dipinjam") {
-        badgeHtml =
-          '<span class="badge-status badge-dipinjam"><i class="fas fa-book-open me-1"></i>Dipinjam</span>';
+        badgeHtml = '<span class="badge-status badge-dipinjam"><i class="fas fa-book-open me-1"></i>Dipinjam</span>';
       } else if (status === "dikembalikan") {
-        badgeHtml =
-          '<span class="badge-status badge-dikembalikan"><i class="fas fa-check-circle me-1"></i>Dikembalikan</span>';
+        badgeHtml = '<span class="badge-status badge-dikembalikan"><i class="fas fa-check me-1"></i>Dikembalikan</span>';
       } else if (status === "ditolak") {
-        badgeHtml =
-          '<span class="badge-status badge-ditolak"><i class="fas fa-times-circle me-1"></i>Ditolak</span>';
+        badgeHtml = '<span class="badge-status badge-ditolak"><i class="fas fa-times me-1"></i>Ditolak</span>';
       } else {
-        badgeHtml = `<span class="badge-status badge-dipinjam">${item.status || "-"}</span>`;
+        badgeHtml = `<span class="badge-status bg-secondary">${item.status || "-"}</span>`;
       }
 
-      // ── Kolom Harga/Denda ─────────────────────────────────────────────
       let dendaHtml = "";
       if (status === "pending") {
-        dendaHtml = '<em class="text-warning fw-semibold">Menunggu Admin</em>';
+        dendaHtml = '<em class="text-warning small">Menunggu</em>';
       } else if (status === "ditolak") {
-        dendaHtml = '<span class="text-muted">-</span>';
+        dendaHtml = '<span class="text-muted small">-</span>';
       } else {
         const nominal = parseFloat(item.total_denda) || 0;
-        dendaHtml =
-          nominal > 0
-            ? `<span class="text-danger fw-semibold">Rp ${nominal.toLocaleString("id-ID")}</span>`
-            : '<span class="text-muted">Gratis</span>';
+        dendaHtml = nominal > 0
+            ? `<span class="text-danger fw-bold">Rp ${nominal.toLocaleString("id-ID")}</span>`
+            : '<span class="text-success fw-bold">Gratis</span>';
       }
 
-      // ── Format tanggal ────────────────────────────────────────────────
       const tglPinjam = formatTanggal(item.tanggal_pinjam);
       const batasKembali = formatTanggal(item.batas_kembali);
 
       html += `
-                <tr class="text-center">
-                    <td>${index + 1}</td>
-                    <td>
-                        <img src="${coverSrc}"
-                             alt="Cover"
-                             style="width:50px; height:70px; object-fit:cover; border-radius:4px;"
-                             onerror="this.src='../../images/a.png'">
-                    </td>
-                    <td class="text-start fw-medium">${item.judul_buku || "-"}</td>
-                    <td>${tglPinjam}</td>
-                    <td>${batasKembali}</td>
-                    <td>${dendaHtml}</td>
-                    <td>${badgeHtml}</td>
-                </tr>
-            `;
+            <tr align="center">
+                <td>${index + 1}</td>
+                <td><img src="${coverSrc}" alt="Cover" style="height: 70px; object-fit: cover; border-radius: 4px;" onerror="this.onerror=null;this.src='../../images/a.png'"></td>
+                <td class="text-start fw-medium">${item.judul_buku || "-"}</td>
+                <td>${tglPinjam}</td>
+                <td>${batasKembali}</td>
+                <td>${dendaHtml}</td>
+                <td>${badgeHtml}</td>
+            </tr>`;
     });
 
     tbody.innerHTML = html;
 
-    // ── Inisialisasi DataTables ───────────────────────────────────────────
+    // Initialize DataTables
     if (typeof $ !== "undefined" && $.fn.DataTable) {
       if ($.fn.DataTable.isDataTable("#dataTable")) {
         $("#dataTable").DataTable().destroy();
@@ -132,13 +118,19 @@ async function loadHistoryUser(userID) {
         order: [[0, "desc"]],
         language: {
           search: "Cari:",
-          lengthMenu: "Tampilkan _MENU_ data",
+          lengthMenu: "Tampilkan _MENU_ entri",
           info: "Menampilkan _START_–_END_ dari _TOTAL_ entri",
-          paginate: { previous: "Sebelumnya", next: "Berikutnya" },
-          emptyTable: "Tidak ada riwayat peminjaman.",
+          paginate: {
+            first: "Awal",
+            last: "Akhir",
+            next: "Lanjut",
+            previous: "Mundur",
+          },
+          emptyTable: "Belum ada riwayat peminjaman.",
         },
       });
     }
+
   } catch (error) {
     console.error("Error memuat riwayat:", error);
     tbody.innerHTML =

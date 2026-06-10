@@ -29,9 +29,10 @@
 
         <style>
             body {
-                background-color: #ffffff;
-                color: #ffffff;
+                background: linear-gradient(rgba(244, 252, 247, 0.88), rgba(230, 244, 234, 0.92)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat fixed;
+                color: #333333;
                 font-family: "Poppins", sans-serif;
+                min-height: 100vh;
             }
             .sidebar {
                 display: none !important;
@@ -350,7 +351,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a href="login.html" class="btn btn-success">Pinjam</a>
+                        <button type="button" class="btn btn-success" onclick="alertPinjam()">Pinjam</button>
                         <button
                             type="button"
                             class="btn btn-secondary"

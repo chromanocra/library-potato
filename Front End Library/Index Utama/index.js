@@ -102,3 +102,9 @@ function bukaModalDetail(idBuku) {
     detailModal.show();
   }
 }
+
+// Fungsi Alert Saat Pinjam dari Index
+function alertPinjam() {
+  alert("Anda harus login terlebih dahulu untuk meminjam buku!");
+  window.location.href = "../Login/login.html";
+}
