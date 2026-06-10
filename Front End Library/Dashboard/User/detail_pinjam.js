@@ -62,33 +62,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const sqlBatasKembali =
         localBatasKembali.toISOString().slice(0, 16).replace("T", " ") + ":00";
 
-      // ── FITUR 1: Payload disesuaikan dengan format yang diharapkan PeminjamanController
-      // id_buku di form berisi nilai bukuID (sudah di-map oleh BukuController)
-      // const payload = {
-      //   userID: document.getElementById("userID").value,
-      //   batas_kembali: sqlBatasKembali,
-      //   buku_yang_dipinjam: [
-      //     {
-      //       bukuID: document.getElementById("id_buku").value,
-      //       qty: 1,
-      //     },
-      //   ],
-      // };
       const payload = {
         userID: document.getElementById("userID").value,
-        bukuID: document.getElementById("id_buku").value,
+        batas_kembali: sqlBatasKembali,
+        buku_yang_dipinjam: [
+          {
+            bukuID: document.getElementById("id_buku").value,
+            qty: 1,
+          },
+        ],
       };
 
       try {
-        const response = await fetch(`${API_URL}/reservasi`, {
+        const response = await fetch(`${API_URL}/peminjaman`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
 
         if (response.ok) {
-          alert("Reservasi Buku Berhasil Diajukan!");
-          window.location.href = "reservasi.html";
+          alert("Peminjaman Buku Berhasil Diajukan!");
+          window.location.href = "daftar_pinjam.html";
         } else {
           // ── FITUR 1: Tangkap error 400 stok habis dari server
           const result = await response.json();
