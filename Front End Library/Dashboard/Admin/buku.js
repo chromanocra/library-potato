@@ -7,15 +7,15 @@ let currentEditIdBuku = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initHalaman();
-    loadKategori(); 
+    loadKategori();
     loadBuku();
 
     // 1. Submit Tambah Buku 
     const formTambahBuku = document.getElementById('formTambahBuku');
     if (formTambahBuku) {
-        formTambahBuku.addEventListener('submit', async function(e) {
+        formTambahBuku.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const btnSubmit = this.querySelector('button[type="submit"]');
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Menyimpan...';
@@ -25,14 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(`${API_URL}/buku`, {
                     method: 'POST',
-                    body: formData 
+                    body: formData
                 });
 
                 if (response.ok) {
                     const modalEl = document.getElementById('modalTambahBuku');
                     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                     modalInstance.hide();
-                    
+
                     formTambahBuku.reset();
                     loadBuku();
                     alert('Data buku berhasil ditambahkan!');
@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Submit Edit Buku
     const formEditBuku = document.getElementById('formEditBuku');
     if (formEditBuku) {
-        formEditBuku.addEventListener('submit', async function(e) {
+        formEditBuku.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             if (!currentEditIdBuku) {
                 alert("Gagal: ID Buku tidak ditemukan.");
                 return;
@@ -65,24 +65,43 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Mengupdate...';
 
-            const formData = new FormData(this);
-            formData.append('_method', 'PUT');
+            const formData = new FormData();
+            formData.append('judul', document.getElementById('editJudul').value);
+            formData.append('pengarang', document.getElementById('editPengarang').value);
+            formData.append('penerbit', document.getElementById('editPenerbit').value);
+            formData.append('thn_terbit', document.getElementById('editThnTerbit').value);
+
+            if (document.getElementById('editIsbn')) {
+                formData.append('isbn', document.getElementById('editIsbn').value);
+            }
+
+            formData.append('kategoriID', document.getElementById('editKategori').value);
+
+            // Ambil file cover jika user memilih file baru
+            const inputCover = document.getElementById('editCover');
+            if (inputCover && inputCover.files.length > 0) {
+                formData.append('cover', inputCover.files[0]);
+            }
 
             try {
+                // KIRIM SEBAGAI POST MURNI TANPA EMBEL-EMBEL _METHOD PUT
                 const response = await fetch(`${API_URL}/buku/${currentEditIdBuku}`, {
-                    method: 'POST', 
+                    method: 'POST',
                     body: formData
                 });
 
-                if (response.ok) {
+                const result = await response.json();
+
+                if (response.ok || result.status === 200) {
+                    // Tutup modal secara otomatis
                     const modalEl = document.getElementById('modalEditBuku');
                     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                     modalInstance.hide();
-                    
+
+                    // Refresh data tabel & beri notifikasi
                     loadBuku();
-                    alert('Data buku berhasil diupdate!');
+                    alert('Data buku berhasil diperbarui!');
                 } else {
-                    const result = await response.json();
                     alert('Gagal: ' + (result.pesan || 'Terjadi kesalahan pada server.'));
                 }
             } catch (error) {
@@ -98,9 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup Logout dengan path ../../index.html
     const btnLogout = document.getElementById('btnLogout');
     if (btnLogout) {
-        btnLogout.addEventListener('click', function(e) {
+        btnLogout.addEventListener('click', function (e) {
             e.preventDefault();
-            if(confirm('Apakah Anda yakin ingin keluar dari aplikasi Fapus?')) {
+            if (confirm('Apakah Anda yakin ingin keluar dari aplikasi Fapus?')) {
                 localStorage.clear();
                 sessionStorage.clear();
                 window.location.href = '../../Index Utama/index.html'; // Path menuju halaman utama
@@ -120,24 +139,24 @@ async function loadKategori() {
     try {
         const response = await fetch(`${API_URL}/kategori`);
         const result = await response.json();
-        
+
         let data = [];
         if (Array.isArray(result)) data = result;
         else if (result.data && Array.isArray(result.data)) data = result.data;
-        
+
         dataKategoriGlobal = data;
 
         const selectAdd = document.getElementById('addKategori');
         const selectEdit = document.getElementById('editKategori');
-        
+
         let optionsHTML = '<option selected disabled value="">-- Pilih Kategori --</option>';
         data.forEach(kat => {
             const idKat = kat.kategoriID || kat.id_kategori;
             optionsHTML += `<option value="${idKat}">${kat.nama_kategori}</option>`;
         });
 
-        if(selectAdd) selectAdd.innerHTML = optionsHTML;
-        if(selectEdit) selectEdit.innerHTML = optionsHTML;
+        if (selectAdd) selectAdd.innerHTML = optionsHTML;
+        if (selectEdit) selectEdit.innerHTML = optionsHTML;
 
     } catch (error) {
         console.error("Gagal memuat kategori:", error);
@@ -164,10 +183,10 @@ async function loadBuku() {
 
         dataBukuGlobal = data;
         let tableHTML = '';
-        
+
         data.forEach((item, index) => {
             const coverImg = item.cover ? `http://localhost:8080/uploads/cover/${item.cover}` : '../../images/default-book.png';
-            
+
             tableHTML += `
                 <tr>
                     <td align="center">${index + 1}</td>
@@ -207,37 +226,38 @@ async function loadBuku() {
 
 function bukaModalEdit(id_buku) {
     const buku = dataBukuGlobal.find(b => b.id_buku == id_buku);
-    
+
     if (buku) {
-        currentEditIdBuku = buku.id_buku; 
-        
+        currentEditIdBuku = buku.id_buku;
+
         const titleEl = document.getElementById('titleEditBuku');
-        if(titleEl) titleEl.innerText = buku.judul;
-        
+        if (titleEl) titleEl.innerText = buku.judul;
+
         document.getElementById('editJudul').value = buku.judul;
         document.getElementById('editPengarang').value = buku.pengarang;
         document.getElementById('editPenerbit').value = buku.penerbit;
-        document.getElementById('editThnTerbit').value = buku.thn_terbit; 
-        
-        if(document.getElementById('editIsbn') && buku.isbn) {
+        document.getElementById('editThnTerbit').value = buku.thn_terbit;
+
+        if (document.getElementById('editIsbn') && buku.isbn) {
             document.getElementById('editIsbn').value = buku.isbn;
         }
 
         const selectKat = document.getElementById('editKategori');
-        if(selectKat && buku.id_kategori) {
-            selectKat.value = buku.id_kategori;
+        if (selectKat) {
+            const katId = buku.kategoriID || buku.id_kategori;
+            if (katId) selectKat.value = katId;
         }
 
         const previewCover = document.getElementById('previewEditCover');
-        if(previewCover) {
+        if (previewCover) {
             previewCover.src = buku.cover ? `http://localhost:8080/uploads/cover/${buku.cover}` : '../../images/default-book.png';
         }
-        
+
         const coverLama = document.getElementById('editCoverLama');
-        if(coverLama) coverLama.value = buku.cover || '';
-        
+        if (coverLama) coverLama.value = buku.cover || '';
+
         const inputCover = document.getElementById('editCover');
-        if(inputCover) inputCover.value = "";
+        if (inputCover) inputCover.value = "";
 
         const modalEl = document.getElementById('modalEditBuku');
         const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
@@ -263,4 +283,62 @@ async function hapusBuku(id_buku, judul) {
             alert('Terjadi kesalahan jaringan.');
         }
     }
+
+
+    let currentStokIdBuku = null;
+
+    // Buka Modal Stok
+    function bukaModalStok(id_buku, total, avail) {
+        currentStokIdBuku = id_buku;
+        document.getElementById('editTotalCopy').value = total || 0;
+        document.getElementById('editAvailCopy').value = avail || 0;
+
+        const modalEl = document.getElementById('modalEditStok');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+
+    // Event Listener Submit Update Stok
+    document.addEventListener('DOMContentLoaded', () => {
+        const formEditStok = document.getElementById('formEditStok');
+        if (formEditStok) {
+            formEditStok.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                if (!currentStokIdBuku) return;
+
+                const btnSubmit = this.querySelector('button[type="submit"]');
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = 'Menyimpan...';
+
+                const formData = new FormData(this);
+
+                try {
+                    const response = await fetch(`${API_URL}/buku/${currentStokIdBuku}/stok`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok || result.status === 200) {
+                        const modalEl = document.getElementById('modalEditStok');
+                        const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                        modalInstance.hide();
+
+                        loadBuku(); // Refresh Data Tabel
+                        alert('Stok berhasil diperbarui!');
+                    } else {
+                        alert('Gagal: ' + (result.pesan || 'Terjadi kesalahan pada server.'));
+                    }
+                } catch (error) {
+                    console.error('Error saat update stok:', error);
+                    alert('Terjadi kesalahan jaringan.');
+                } finally {
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = 'Update Stok';
+                }
+            });
+        }
+    });
+
 }

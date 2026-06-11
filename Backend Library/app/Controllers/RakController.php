@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Controllers;
+
 use CodeIgniter\RESTful\ResourceController;
 
-class KategoriController extends ResourceController
+class RakController extends ResourceController
 {
-    protected $modelName = 'App\Models\KategoriModel';
+    protected $modelName = 'App\Models\RakModel';
     
     protected $format    = 'json'; 
 
@@ -15,12 +16,11 @@ class KategoriController extends ResourceController
         
         return $this->respond([
             'status' => 200,
-            'pesan'  => 'Berhasil mengambil data kategori',
+            'pesan'  => 'Berhasil mengambil data Rak',
             'data'   => $data
         ], 200);
     }
 
-    // 2. Endpoint: GET /api/kategori/(:num) (Menampilkan 1 kategori spesifik)
     public function show($id = null)
     {
         $data = $this->model->find($id);
@@ -28,15 +28,14 @@ class KategoriController extends ResourceController
         if ($data) {
             return $this->respond([
                 'status' => 200,
-                'pesan'  => 'Data kategori ditemukan',
+                'pesan'  => 'Data Rak ditemukan',
                 'data'   => $data
             ], 200);
         }
 
-        return $this->failNotFound("Kategori dengan ID $id tidak ditemukan");
+        return $this->failNotFound("Rak dengan ID $id tidak ditemukan");
     }
 
-    // 3. Endpoint: POST /api/kategori (Menambahkan kategori baru)
     public function create()
     {
         $data = $this->request->getJSON();
@@ -44,7 +43,7 @@ class KategoriController extends ResourceController
         if ($this->model->insert($data)) {
             return $this->respondCreated([
                 'status' => 201,
-                'pesan'  => 'Kategori berhasil ditambahkan',
+                'pesan'  => 'Rak berhasil ditambahkan',
                 'data'   => $data
             ]);
         }
@@ -52,7 +51,6 @@ class KategoriController extends ResourceController
         return $this->fail($this->model->errors());
     }
 
-    // 4. Endpoint: PUT /api/kategori/(:num) (Update kategori)
     public function update($id = null)
     {
         $data = $this->request->getJSON();
@@ -60,7 +58,7 @@ class KategoriController extends ResourceController
         if ($this->model->update($id, $data)) {
             return $this->respond([
                 'status' => 200,
-                'pesan'  => 'Kategori berhasil diupdate',
+                'pesan'  => 'Rak berhasil diupdate',
                 'data'   => $data
             ]);
         }
@@ -68,16 +66,15 @@ class KategoriController extends ResourceController
         return $this->fail($this->model->errors());
     }
 
-     // 5. Endpoint: DELETE /api/kategori/(:num) (Menghapus kategori)
-     public function delete($id = null)
-     {
-         if ($this->model->delete($id)) {
-             return $this->respondDeleted([
-                 'status' => 200,
-                 'pesan'  => 'Kategori berhasil dihapus',
-             ]);
-         }
+    public function delete($id = null)
+    {
+        if ($this->model->delete($id)) {
+            return $this->respondDeleted([
+                'status' => 200,
+                'pesan'  => 'Rak berhasil dihapus',
+            ]);
+        }
 
-         return $this->failNotFound("Kategori dengan ID $id tidak ditemukan");
-     }
+        return $this->failNotFound("Rak dengan ID $id tidak ditemukan");
+    }
 }

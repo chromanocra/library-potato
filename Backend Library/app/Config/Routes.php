@@ -11,18 +11,13 @@ $routes->post("api/register", "PenggunaController::register");
 $routes->post("api/login", "PenggunaController::login");
 
 $routes->group("api", function ($routes) {
-    // ── Auth Endpoints ─────────────────────────────────────────────────────────
-
-    // ────────────────────────────────────────────────────────────────────────────
-
     $routes->get("buku", "BukuController::index");
     $routes->get("buku/(:num)", 'BukuController::show/$1');
     $routes->post("buku", "BukuController::create");
-
-    // UBAH BARIS INI: Gunakan method post() agar bisa menerima upload file edit cover
     $routes->post("buku/(:num)", 'BukuController::update/$1');
-
     $routes->delete("buku/(:num)", 'BukuController::delete/$1');
+    $routes->post('buku/(:num)/stok', 'BukuController::updateStok/$1');
+
 
     $routes->get("kategori", "KategoriController::index"); // routes masuk ke method index() di KategoriController
     $routes->get("kategori/(:num)", 'KategoriController::show/$1'); // routes masuk ke method show($id) di KategoriController, $1 adalah parameter ID yang dikirim
@@ -30,10 +25,16 @@ $routes->group("api", function ($routes) {
     $routes->put("kategori/(:num)", 'KategoriController::update/$1'); // routes masuk ke method update($id) di KategoriController untuk update kategori berdasarkan ID
     $routes->delete("kategori/(:num)", 'KategoriController::delete/$1'); //routes masuk ke method delete($id) di KategoriController untuk delete kategori berdasarkan ID
 
+  
+    $routes->get("rak", "RakController::index");
+    $routes->get("rak/(:num)", "RakController::show/$1");
+    $routes->post("rak", "RakController::create");
+    $routes->put("rak/(:num)", "RakController::update/$1");
+    $routes->delete("rak/(:num)", "RakController::delete/$1");
+
     $routes->get("pengguna", "PenggunaController::index"); // routes masuk ke method index() di PenggunaController untuk menampilkan semua pengguna
     $routes->post("pengguna/register", "PenggunaController::register"); // routes masuk ke method register() di PenggunaController untuk registrasi pengguna baru
     $routes->post("pengguna/login", "PenggunaController::login"); // routes masuk ke method login() di PenggunaController untuk login pengguna
-    // TAMBAHKAN DUA BARIS INI UNTUK EDIT DAN HAPUS
     $routes->put("pengguna/(:num)", "PenggunaController::update/$1");
     $routes->delete("pengguna/(:num)", "PenggunaController::delete/$1");
     // ── Suspend / Unsuspend user account ─────────────────────────────────────
@@ -63,20 +64,12 @@ $routes->group("api", function ($routes) {
     // ── Laporan AI ────────────────────────────────────────────────────────────
     $routes->post("laporan/ai", "LaporanController::generateAI");
 
-    $routes->get("stok", "StokController::index"); // routes masuk ke method index() di StokController untuk menampilkan semua stok
-    $routes->post("stok", "StokController::create"); // routes masuk ke method create() di
+    $routes->get("stok", "StokController::index");
+    $routes->get("stok/(:num)", "StokController::show/$1");  // <-- WAJIB untuk buka modal edit
+    $routes->post("stok", "StokController::create");
+    $routes->put("stok/(:num)", "StokController::update/$1"); // <-- WAJIB untuk simpan perubahan
 
     // ── FITUR 2: Analytics Dashboard ─────────────────────────────────────────
     $routes->get("analytics", "AnalyticsController::index");
 
-    // ── FITUR 3: Reservasi Buku ───────────────────────────────────────────────
-    $routes->get('api/reservasi', 'ReservasiController::index');
-
-    $routes->post('api/reservasi', 'ReservasiController::create');
-
-    $routes->put('api/reservasi/(:num)/approve', 'ReservasiController::approve/$1');
-
-    $routes->put('api/reservasi/(:num)/reject', 'ReservasiController::reject/$1');
-
-    $routes->get('api/reservasi/user/(:num)', 'ReservasiController::userHistory/$1');
 });

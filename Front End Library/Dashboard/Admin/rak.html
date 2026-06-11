@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar User - Perpustakaan</title>
-    
+    <title>Data Rak - Fapus</title>
+
     <link rel="icon" href="../../images/s.png" type="image/png">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link href="../../assets2/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <style>
@@ -25,16 +26,16 @@
         }
 
         body {
-            background-color: #f4fcf7; /* Putih kehijauan sangat muda */
+            background-color: #f4fcf7;
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* SIDEBAR (Kiri) */
+        /* SIDEBAR */
         .sidebar {
             width: 260px;
-            background-color: #16a34a; /* Hijau Utama */
+            background-color: #16a34a;
             color: white;
             display: flex;
             flex-direction: column;
@@ -47,7 +48,7 @@
             text-align: center;
             font-size: 24px;
             font-weight: 700;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             letter-spacing: 1px;
         }
 
@@ -71,14 +72,15 @@
             gap: 15px;
         }
 
-        .sidebar-menu li:hover, .sidebar-menu li.active {
-            background-color: #15803d; /* Hijau lebih gelap untuk efek hover */
+        .sidebar-menu li:hover,
+        .sidebar-menu li.active {
+            background-color: #15803d;
             border-left: 5px solid #ffffff;
         }
 
         .logout-btn {
             padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logout-btn a {
@@ -98,7 +100,7 @@
             background-color: #b91c1c;
         }
 
-        /* MAIN CONTENT (Kanan) */
+        /* MAIN CONTENT */
         .main-content {
             flex: 1;
             display: flex;
@@ -114,7 +116,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             flex-shrink: 0;
         }
 
@@ -143,12 +145,38 @@
             font-weight: 600;
         }
 
+        /* HEADER TABEL & BUTTON TAMBAH */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-add {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover {
+            background-color: #15803d;
+            color: white;
+        }
+
         /* TABEL CONTAINER & OVERRIDE DATATABLES */
         .table-container {
             background-color: #ffffff;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
         .table-container h3 {
@@ -164,7 +192,8 @@
             margin-top: 15px !important;
         }
 
-        table.dataTable th, table.dataTable td {
+        table.dataTable th,
+        table.dataTable td {
             padding: 15px !important;
             vertical-align: middle;
             border-bottom: 1px solid #e5e7eb !important;
@@ -178,8 +207,7 @@
             border-bottom: 2px solid #e5e7eb !important;
         }
 
-        /* Pagination Styling */
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
         .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
             background: #16a34a !important;
             color: white !important;
@@ -199,25 +227,50 @@
             color: white;
             transition: 0.2s;
             margin: 0 3px;
+            cursor: pointer;
         }
 
-        .btn-edit { background-color: #f59e0b; }
-        .btn-edit:hover { background-color: #d97706; }
-        
-        .btn-delete { background-color: #ef4444; }
-        .btn-delete:hover { background-color: #dc2626; }
-        
+        .btn-edit {
+            background-color: #f59e0b;
+        }
+
+        .btn-edit:hover {
+            background-color: #d97706;
+        }
+
+        .btn-delete {
+            background-color: #ef4444;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc2626;
+        }
+
         /* Modal Customization */
         .modal-header {
             border-bottom: 1px solid #e5e7eb;
         }
+
         .modal-title {
             color: #16a34a;
             font-weight: 600;
         }
+
         .form-label {
             color: #4b5563;
             font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            padding: 10px 15px;
+        }
+
+        .form-control:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 0.25rem rgba(22, 163, 74, 0.25);
         }
     </style>
 </head>
@@ -236,14 +289,14 @@
                 <a href="buku.html"><i class="fas fa-book"></i> Data Buku</a>
             </li>
             <li> <a href="stok.html"><i class="fas fa-boxes"></i> Data Stok</a>
-            </li>            
+            </li>
             <li>
                 <a href="kategori.html"><i class="fas fa-tags"></i> Data Kategori</a>
             </li>
-            <li class="active">
+            <li>
                 <a href="akunUser.html"><i class="fas fa-users"></i> Data Anggota</a>
             </li>
-            <li>
+            <li class="active">
                 <a href="rak.html"><i class="fas fa-shelf"></i> Rak</a>
             </li>
             <li>
@@ -262,32 +315,36 @@
         <header class="topbar">
             <div class="toggle-btn"></div>
             <div class="user-info">
-                <span id="sessUsernameDropdown">Memuat...</span>
+                <span id="sessUsernameDropdown">Admin</span>
                 <i class="fas fa-user-circle"></i>
             </div>
         </header>
 
         <section class="content">
-            <h2 class="page-title">Data Pengguna</h2>
+            <div class="header-actions">
+                <h2 class="page-title m-0">Data Rak Buku</h2>
+                <button class="btn-add" onclick="bukaModalTambahRak()">
+                    <i class="fas fa-plus"></i> Tambah Rak
+                </button>
+            </div>
 
             <div class="table-container">
-                <h3>Daftar Member</h3>
+                <h3>Daftar Rak</h3>
                 <div class="table-responsive">
                     <table class="table" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nomor Identitas</th>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th>No Telp</th>
-                                <th>Gender</th>
-                                <th>Status</th>
-                                <th style="text-align: center;">Aksi</th>
+                                <th width="10%">No</th>
+                                <th width="30%">Nama Rak</th>
+                                <th width="45%">Lokasi</th>
+                                <th width="15%" style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="tableMemberBody">
-                            <tr><td colspan="7" class="text-center" style="padding: 30px !important; color: #6b7280;">Loading data...</td></tr>
+                        <tbody id="tableRakBody">
+                            <tr>
+                                <td colspan="4" class="text-center" style="padding: 30px !important; color: #6b7280;">
+                                    Loading data...</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -295,46 +352,32 @@
         </section>
     </main>
 
-    <div class="modal fade" id="modalEditMember" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="modalRak" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit User - <span id="titleEditNama"></span></h5>
+                    <h5 class="modal-title" id="modalRakTitle">Tambah Rak</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formEditMember">
-                        <div class="mb-3">
-                            <label for="editIdent" class="form-label">Nomor Identitas</label>
-                            <input type="text" id="editNisn" name="nomor_identitas" class="form-control" readonly style="background-color: #f3f4f6;">
+                    <form id="formRak">
+                        <input type="hidden" id="rakID">
+
+                        <div class="mb-4">
+                            <label for="inputNamaRak" class="form-label">Nama Rak</label>
+                            <input type="text" name="nama_rak" id="inputNamaRak" required placeholder="Contoh: Rak 01-A"
+                                autocomplete="off" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="editNama" class="form-label">Nama</label>
-                            <input type="text" id="editNama" name="nama" class="form-control" required>
+                        <div class="mb-4">
+                            <label for="inputLokasi" class="form-label">Lokasi / Deskripsi</label>
+                            <input type="text" name="lokasi" id="inputLokasi"
+                                placeholder="Contoh: Lantai 1, Dekat Jendela" autocomplete="off" class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="editPassword" class="form-label">Password</label>
-                            <input type="text" id="editPassword" name="password" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editEmail" class="form-label">Email</label>
-                            <input type="email" id="editEmail" name="email" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editPhone" class="form-label">No Telp</label>
-                            <input type="text" id="editPhone" name="no_telp" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Gender</label>
-                            <select id="editGender" name="gender" class="form-select" required>
-                                <option class="hidden" selected disabled value="">Pilih Gender</option>
-                                <option value="Laki-laki">Laki-laki</option>
-                                <option value="Perempuan">Perempuan</option>
-                            </select>
-                        </div>
+
                         <div class="modal-footer px-0 pb-0 border-top-0">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn" style="background-color: #16a34a; color: white;">Simpan Perubahan</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" id="btnSubmitRak" class="btn"
+                                style="background-color: #16a34a; color: white;">Simpan Data</button>
                         </div>
                     </form>
                 </div>
@@ -347,7 +390,8 @@
     <script src="../../assets2/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="../../assets2/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <script src="akunUser.js"></script>
+    <script src="rak.js"></script>
 
 </body>
+
 </html>

@@ -15,8 +15,9 @@ class BukuController extends ResourceController
     {
         $db      = \Config\Database::connect();
         $builder = $db->table('buku');
-        $builder->select('buku.*, kategori.nama_kategori');
+        $builder->select('buku.*, kategori.nama_kategori, stok.total_copy, stok.avail_copy');
         $builder->join('kategori', 'kategori.kategoriID = buku.kategoriID', 'left');
+        $builder->join('stok', 'stok.bukuID = buku.bukuID', 'left');
         $query   = $builder->get();
         $data    = $query->getResultArray();
 
@@ -30,7 +31,9 @@ class BukuController extends ResourceController
                 'thn_terbit' => $item['tahun_terbit'],
                 'kategori'   => $item['nama_kategori'] ?? '-',
                 'id_kategori' => $item['kategoriID'],
-                'cover'      => $item['cover']
+                'cover'      => $item['cover'],
+                'total_copy' => $item['total_copy'] ?? 0,
+                'avail_copy' => $item['avail_copy'] ?? 0
             ];
         }, $data);
 
@@ -157,5 +160,26 @@ class BukuController extends ResourceController
         if ($this->model->delete($id)) {
             return $this->respondDeleted(['status' => 200, 'pesan' => "Buku berhasil dihapus"]);
         }
+    }
+
+    // 6. Endpoint: POST /api/buku/(:num)/stok (Update Stok)
+    public function updateStok($id = null)
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('stok');
+        
+        $totalCopy = $this->request->getPost('total_copy');
+        $availCopy = $this->request->getPost('avail_copy');
+
+        if ($totalCopy === null || $availCopy === null) {
+             return $this->fail('total_copy dan avail_copy harus diisi', 400);
+        }
+
+        $builder->where('bukuID', $id);
+        if ($builder->update(['total_copy' => $totalCopy, 'avail_copy' => $availCopy])) {
+            return $this->respond(['status' => 200, 'pesan' => 'Stok buku berhasil diperbarui']);
+        }
+        
+        return $this->fail('Gagal memperbarui stok', 500);
     }
 }
