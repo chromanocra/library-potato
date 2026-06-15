@@ -128,7 +128,7 @@ async function loadMember() {
 
     data.forEach((item, index) => {
       // ── Status badge ──────────────────────────────────────────────────
-      const isSuspended = item.status === "suspended";
+      const isSuspended = item.status === "inactive";
       const statusBadge = isSuspended
         ? '<span class="badge-akun-suspended"><i class="fas fa-user-slash me-1"></i>Dinonaktifkan</span>'
         : '<span class="badge-akun-aktif"><i class="fas fa-user-check me-1"></i>Aktif</span>';
@@ -268,7 +268,7 @@ async function hapusMember(userID, username) {
 // Backend juga mencegah user yang suspended dari login.
 // ─────────────────────────────────────────────────────────────────────────────
 async function toggleSuspendMember(userID, currentStatus, username) {
-  const isSuspended = currentStatus === "suspended";
+  const isSuspended = currentStatus === "inactive";
   const aksi = isSuspended ? "Aktifkan kembali" : "Nonaktifkan (Suspend)";
 
   const konfirmasi = confirm(

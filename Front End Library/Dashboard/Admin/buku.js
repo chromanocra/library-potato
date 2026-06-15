@@ -8,6 +8,7 @@ let currentEditIdBuku = null;
 document.addEventListener('DOMContentLoaded', () => {
     initHalaman();
     loadKategori();
+    loadRak();
     loadBuku();
 
     // 1. Submit Tambah Buku 
@@ -76,6 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             formData.append('kategoriID', document.getElementById('editKategori').value);
+            formData.append('rakID', document.getElementById('editRak').value);
+            formData.append('sinopsis', document.getElementById('editSinopsis').value);
 
             // Ambil file cover jika user memilih file baru
             const inputCover = document.getElementById('editCover');
@@ -163,6 +166,32 @@ async function loadKategori() {
     }
 }
 
+// Memuat data Rak untuk Dropdown
+async function loadRak() {
+    try {
+        const response = await fetch(`${API_URL}/rak`);
+        const result = await response.json();
+
+        let data = [];
+        if (Array.isArray(result)) data = result;
+        else if (result.data && Array.isArray(result.data)) data = result.data;
+
+        const selectAdd = document.getElementById('addRak');
+        const selectEdit = document.getElementById('editRak');
+
+        let optionsHTML = '<option selected disabled value="">Pilih Rak</option>';
+        data.forEach(rak => {
+            optionsHTML += `<option value="${rak.rakID}">${rak.nama_rak} - ${rak.lokasi}</option>`;
+        });
+
+        if (selectAdd) selectAdd.innerHTML = optionsHTML;
+        if (selectEdit) selectEdit.innerHTML = optionsHTML;
+
+    } catch (error) {
+        console.error("Gagal memuat rak:", error);
+    }
+}
+
 // Memuat data Buku untuk Tabel
 async function loadBuku() {
     const tbody = document.getElementById('tableBukuBody');
@@ -246,6 +275,16 @@ function bukaModalEdit(id_buku) {
         if (selectKat) {
             const katId = buku.kategoriID || buku.id_kategori;
             if (katId) selectKat.value = katId;
+        }
+
+        const selectRak = document.getElementById('editRak');
+        if (selectRak && buku.rakID) {
+            selectRak.value = buku.rakID;
+        }
+
+        const inputSinopsis = document.getElementById('editSinopsis');
+        if (inputSinopsis) {
+            inputSinopsis.value = buku.sinopsis || '';
         }
 
         const previewCover = document.getElementById('previewEditCover');

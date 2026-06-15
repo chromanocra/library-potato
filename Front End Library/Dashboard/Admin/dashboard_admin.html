@@ -370,39 +370,48 @@
                 <canvas id="analyticsChart" style="max-height: 320px"></canvas>
             </div>
 
-            <div class="table-container" style="margin-top: 25px">
-                <h3>Aktivitas Peminjaman Terbaru</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Siswa</th>
-                            <th>Judul Buku</th>
-                            <th>Tgl Pinjam</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Budi Santoso</td>
-                            <td>Pemrograman Web Dasar</td>
-                            <td>19 Mei 2026</td>
-                            <td>
-                                <span class="status-badge status-dipinjam">Dipinjam</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Siti Aminah</td>
-                            <td>Sejarah Indonesia Raya</td>
-                            <td>18 Mei 2026</td>
-                            <td>
-                                <span class="status-badge status-dikembalikan">Dikembalikan</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="row mt-4">
+                <div class="col-lg-8">
+                    <div class="table-container">
+                        <h3>Aktivitas Peminjaman Terbaru</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Judul Buku</th>
+                                    <th>Tgl Pinjam</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-3">Fitur Aktivitas Terbaru Belum Tersedia</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4 mt-4 mt-lg-0">
+                    <div class="table-container h-100">
+                        <h3>Buku Sering Dipinjam</h3>
+                        <table class="table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Judul Buku</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topBooksTableBody">
+                                <tr>
+                                    <td colspan="2" class="text-center">
+                                        <span class="stat-loading"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -537,6 +546,24 @@
                         },
                     },
                 });
+
+                // Tampilkan Top Books
+                const tbody = document.getElementById('topBooksTableBody');
+                if (data.top_books && data.top_books.length > 0) {
+                    let html = '';
+                    data.top_books.forEach(b => {
+                        html += `
+                            <tr>
+                                <td>${b.judul_buku}</td>
+                                <td class="text-center fw-bold text-success">${b.total_dipinjam}x</td>
+                            </tr>
+                        `;
+                    });
+                    tbody.innerHTML = html;
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted">Belum ada data</td></tr>';
+                }
+
             } catch (error) {
                 console.error("Analytics error:", error);
                 // Tampilkan angka fallback jika API gagal

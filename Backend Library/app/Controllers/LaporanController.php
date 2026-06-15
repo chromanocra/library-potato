@@ -178,4 +178,119 @@ PROMPT;
             'ai_summary' => $aiHtml,
         ]);
     }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // GET /api/laporan/export
+    // Query params: ?bulan=6&tahun=2026
+    // ─────────────────────────────────────────────────────────────────────────
+    public function exportCSV()
+    {
+        $bulan = (int) $this->request->getGet('bulan') ?: (int) date('m');
+        $tahun = (int) $this->request->getGet('tahun') ?: (int) date('Y');
+
+        $db = \Config\Database::connect();
+
+        $data = $db->query("
+            SELECT
+                p.pinjamID,
+                pg.username AS nama_user,
+                b.judul_buku,
+                p.tanggal_pinjam,
+                p.batas_kembali,
+                p.tanggal_kembali,
+                p.status,
+                p.total_denda
+            FROM peminjaman p
+            LEFT JOIN pengguna pg ON p.userID = pg.userID
+            LEFT JOIN (
+                SELECT pinjamID, MIN(bukuID) AS bukuID
+                FROM detail
+                GROUP BY pinjamID
+            ) d ON p.pinjamID = d.pinjamID
+            LEFT JOIN buku b ON d.bukuID = b.bukuID
+            WHERE MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
+            ORDER BY p.tanggal_pinjam ASC
+        ", [$bulan, $tahun])->getResultArray();
+
+        $filename = "Laporan_Peminjaman_{$bulan}_{$tahun}.xls";
+
+        // Membangun struktur HTML table yang dapat dibaca oleh MS Excel
+        $html = '<html><head><meta charset="UTF-8"></head><body>';
+        $html .= '<h2 style="text-align: center;">Laporan Peminjaman Perpustakaan</h2>';
+        $html .= '<h4 style="text-align: center;">Bulan: ' . $bulan . ' / Tahun: ' . $tahun . '</h4>';
+        $html .= '<table border="1" style="border-collapse: collapse; width: 100%;">';
+        
+        // Header
+        $html .= '<tr style="background-color: #16a34a; color: white; font-weight: bold;">';
+        $html .= '<th>ID Peminjaman</th>';
+        $html .= '<th>Nama Pengguna</th>';
+        $html .= '<th>Judul Buku</th>';
+        $html .= '<th>Tanggal Pinjam</th>';
+        $html .= '<th>Batas Kembali</th>';
+        $html .= '<th>Tanggal Kembali</th>';
+        $html .= '<th>Status</th>';
+        $html .= '<th>Total Denda</th>';
+        $html .= '</tr>';
+
+        // Data
+        foreach ($data as $row) {
+            $html .= '<tr>';
+            $html .= '<td>' . htmlspecialchars($row['pinjamID']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['nama_user'] ?? '-') . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['judul_buku'] ?? '-') . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['tanggal_pinjam']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['batas_kembali']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['tanggal_kembali'] ?? '-') . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['status']) . '</td>';
+            $html .= '<td>' . htmlspecialchars($row['total_denda']) . '</td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '</table></body></html>';
+
+        // Gunakan response CI4 untuk memicu download Excel (.xls)
+        return $this->response->download($filename, $html)
+                              ->setContentType('application/vnd.ms-excel');
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // POST /api/laporan/archive
+    // ─────────────────────────────────────────────────────────────────────────
+    public function archive()
+    {
+        $input = $this->request->getJSON();
+        $bulan = isset($input->bulan) ? (int) $input->bulan : (int) date('m');
+        $tahun = isset($input->tahun) ? (int) $input->tahun : (int) date('Y');
+
+        $db = \Config\Database::connect();
+        
+        $db->transStart();
+
+        // Pindahkan data ke arsip_peminjaman
+        $db->query("
+            INSERT INTO arsip_peminjaman (pinjamID, userID, tanggal_pinjam, batas_kembali, tanggal_kembali, status, total_denda)
+            SELECT pinjamID, userID, tanggal_pinjam, batas_kembali, tanggal_kembali, status, total_denda
+            FROM peminjaman
+            WHERE MONTH(tanggal_pinjam) = ? AND YEAR(tanggal_pinjam) = ?
+            AND status IN ('Dikembalikan', 'Ditolak')
+        ", [$bulan, $tahun]);
+
+        // Hapus data dari peminjaman
+        $db->query("
+            DELETE FROM peminjaman
+            WHERE MONTH(tanggal_pinjam) = ? AND YEAR(tanggal_pinjam) = ?
+            AND status IN ('Dikembalikan', 'Ditolak')
+        ", [$bulan, $tahun]);
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return $this->fail('Gagal mengarsipkan data', 500);
+        }
+
+        return $this->respond([
+            'status' => 200,
+            'pesan' => "Data peminjaman Selesai/Ditolak bulan $bulan tahun $tahun berhasil diarsipkan."
+        ]);
+    }
 }

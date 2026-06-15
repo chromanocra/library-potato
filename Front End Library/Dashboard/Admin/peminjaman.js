@@ -75,10 +75,93 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // CATATAN: Handler "Tambah Peminjaman Manual" telah dihapus.
-  // Semua peminjaman wajib berasal dari request online user,
-  // bukan entri manual oleh admin.
+  // ── 5. Tambah Peminjaman Manual ────────────────────────────────────────────
+  loadDropdownUsers();
+  loadDropdownBuku();
+
+  const formManual = document.getElementById("formTambahPeminjaman");
+  if (formManual) {
+    formManual.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      
+      const payload = {
+        userID: document.getElementById("addManualUser").value,
+        bukuID: document.getElementById("addManualBuku").value,
+        batas_kembali: document.getElementById("addManualBatas").value
+      };
+
+      try {
+        const res = await fetch(`${API_URL}/peminjaman/manual`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (res.ok) {
+          await Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: result.pesan || "Peminjaman manual berhasil ditambahkan.",
+            timer: 2000,
+            showConfirmButton: false
+          });
+          const modalEl = document.getElementById("modalTambahPeminjaman");
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
+          formManual.reset();
+          loadPeminjaman();
+        } else {
+          Swal.fire("Gagal!", result.pesan || "Terjadi kesalahan.", "error");
+        }
+      } catch (err) {
+        Swal.fire("Error!", "Gagal terhubung ke server.", "error");
+      }
+    });
+  }
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FETCH DATA DROPDOWN MANUAL
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadDropdownUsers() {
+  try {
+    const res = await fetch(`${API_URL}/pengguna`);
+    const data = await res.json();
+    const select = document.getElementById("addManualUser");
+    if (!select) return;
+
+    let html = '<option selected disabled value="">Pilih Anggota</option>';
+    const users = Array.isArray(data) ? data : (data.data || []);
+    users.forEach(u => {
+      if (u.role !== 'admin') {
+        html += `<option value="${u.userID || u.id_pengguna}">${u.username} (${u.nomor_identitas || '-'})</option>`;
+      }
+    });
+    select.innerHTML = html;
+  } catch (err) {
+    console.error("Gagal memuat daftar pengguna:", err);
+  }
+}
+
+async function loadDropdownBuku() {
+  try {
+    const res = await fetch(`${API_URL}/buku`);
+    const result = await res.json();
+    const select = document.getElementById("addManualBuku");
+    if (!select) return;
+
+    const books = Array.isArray(result) ? result : (result.data || []);
+    let html = '<option selected disabled value="">Pilih Buku</option>';
+    books.forEach(b => {
+      const avail = b.avail_copy || 0;
+      html += `<option value="${b.id_buku}" ${avail <= 0 ? 'disabled' : ''}>${b.judul} (Tersedia: ${avail})</option>`;
+    });
+    select.innerHTML = html;
+  } catch (err) {
+    console.error("Gagal memuat daftar buku:", err);
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPERS
@@ -259,23 +342,15 @@ async function loadPeminjaman() {
 // APPROVE — PUT /api/peminjaman/{id}/approve
 // ─────────────────────────────────────────────────────────────────────────────
 async function approveItem(pinjamID) {
-  const { value: harga, isConfirmed } = await Swal.fire({
+  const { isConfirmed } = await Swal.fire({
     title: "<strong>Setujui Peminjaman</strong>",
-    html: `<p class="text-muted">Transaksi <strong>#${pinjamID}</strong><br>Masukkan total harga/denda:</p>`,
-    input: "number",
-    inputLabel: "Harga (Rp)",
-    inputPlaceholder: "0",
-    inputValue: 0,
-    inputAttributes: { min: 0, step: 1000 },
+    html: `<p class="text-muted">Transaksi <strong>#${pinjamID}</strong></p>`,
+    icon: 'question',
     showCancelButton: true,
     confirmButtonText: '<i class="fas fa-check me-1"></i> Setujui',
     cancelButtonText: "Batal",
     confirmButtonColor: "#16a34a",
-    cancelButtonColor: "#6b7280",
-    inputValidator: (val) => {
-      if (val === "" || val === null) return "Masukkan harga (0 jika gratis)";
-      if (parseFloat(val) < 0) return "Harga tidak boleh negatif";
-    },
+    cancelButtonColor: "#6b7280"
   });
 
   if (!isConfirmed) return;
@@ -283,8 +358,7 @@ async function approveItem(pinjamID) {
   try {
     const res = await fetch(`${API_URL}/peminjaman/${pinjamID}/approve`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ harga: parseFloat(harga) || 0 }),
+      headers: { "Content-Type": "application/json" }
     });
     const result = await res.json();
 
@@ -371,18 +445,19 @@ async function prosesPengembalian(pinjamID) {
   if (!isConfirmed) return;
 
   try {
-    const res = await fetch(`${API_URL}/peminjaman/kembali/${pinjamID}`, {
+    const res = await fetch(`${API_URL}/peminjaman/${pinjamID}/kembali`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
     });
 
+    const resultText = await res.json();
     if (res.ok) {
       await Swal.fire({
         icon: "success",
         title: "Berhasil!",
-        text: "Buku berhasil dikembalikan.",
-        timer: 2000,
-        showConfirmButton: false,
+        text: resultText.pesan || "Buku berhasil dikembalikan.",
+        timer: 3000,
+        showConfirmButton: true,
       });
       loadPeminjaman();
     } else {

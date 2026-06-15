@@ -181,6 +181,12 @@
                             <button id="btnGenerate" class="btn btn-generate">
                                 <i class="fas fa-magic me-2"></i>Generate AI Report
                             </button>
+                            <button id="btnExportCSV" class="btn btn-outline-light" style="height: 46px; border-radius: 10px; font-weight: 600;">
+                                <i class="fas fa-file-excel me-2"></i>Export Excel
+                            </button>
+                            <button id="btnArchive" class="btn btn-danger" style="height: 46px; border-radius: 10px; font-weight: 600;" title="Arsipkan peminjaman selesai bulan ini">
+                                <i class="fas fa-archive"></i> Arsipkan
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -270,8 +276,10 @@
             document.getElementById('selectBulan').value = now.getMonth() + 1;
             document.getElementById('selectTahun').value = tahunSekarang;
 
-            // Event: generate
+            // Event: generate & export & archive
             document.getElementById('btnGenerate').addEventListener('click', generateReport);
+            document.getElementById('btnExportCSV').addEventListener('click', exportCSV);
+            document.getElementById('btnArchive').addEventListener('click', archivePeminjaman);
 
             // Logout
             document.getElementById('btnLogout').addEventListener('click', (e) => {
@@ -341,6 +349,36 @@
                 document.getElementById('loadingSpinner').style.display = 'none';
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate AI Report';
+            }
+        }
+
+        // ── Export CSV ──────────────────────────────────────────────────────────
+        function exportCSV() {
+            const bulan = document.getElementById('selectBulan').value;
+            const tahun = document.getElementById('selectTahun').value;
+            window.location.href = `${API_BASE}/laporan/export?bulan=${bulan}&tahun=${tahun}`;
+        }
+
+        // ── Archive Peminjaman ────────────────────────────────────────────────
+        async function archivePeminjaman() {
+            const bulan = document.getElementById('selectBulan').value;
+            const tahun = document.getElementById('selectTahun').value;
+            if(!confirm(`Yakin ingin mengarsipkan peminjaman yang Selesai/Ditolak pada bulan ${bulan} ${tahun}?\n\nData akan dipindahkan ke arsip_peminjaman.`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/laporan/archive`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bulan: parseInt(bulan), tahun: parseInt(tahun) }),
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Arsip Berhasil: ' + result.pesan);
+                } else {
+                    alert('Gagal: ' + (result.pesan || 'Kesalahan server.'));
+                }
+            } catch (err) {
+                alert('Terjadi kesalahan jaringan.');
             }
         }
 

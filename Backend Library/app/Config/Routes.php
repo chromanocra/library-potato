@@ -46,11 +46,14 @@ $routes->group("api", function ($routes) {
     $routes->get("denda", "DendaController::index"); // routes masuk ke method index() di DendaController untuk menampilkan semua denda
     $routes->post("denda", "DendaController::create"); // routes masuk ke method create() di DendaController untuk menambahkan denda baru
 
-    // ── Peminjaman — basis ────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
+    // Modul Peminjaman
+    // ─────────────────────────────────────────────────────────────────────────
     $routes->get("peminjaman", "PeminjamanController::index");
     $routes->post("peminjaman", "PeminjamanController::create");
-
-    // ── Peminjaman — Workflow Approval (letakkan SEBELUM :num generik) ────────
+    $routes->post("peminjaman/manual", "PeminjamanController::manual");
+    
+    // Rute dengan parameter spesifik diletakkan sebelum :num generik
     $routes->get(
         "peminjaman/user/(:any)",
         "PeminjamanController::userHistory/$1",
@@ -60,9 +63,12 @@ $routes->group("api", function ($routes) {
         "PeminjamanController::approve/$1",
     );
     $routes->put("peminjaman/(:num)/reject", "PeminjamanController::reject/$1");
+    $routes->put("peminjaman/(:num)/kembali", "PeminjamanController::kembalikan/$1");
 
-    // ── Laporan AI ────────────────────────────────────────────────────────────
+    // ── Laporan AI & Export ───────────────────────────────────────────────────
     $routes->post("laporan/ai", "LaporanController::generateAI");
+    $routes->get("laporan/export", "LaporanController::exportCSV");
+    $routes->post("laporan/archive", "LaporanController::archive");
 
     $routes->get("stok", "StokController::index");
     $routes->get("stok/(:num)", "StokController::show/$1");  // <-- WAJIB untuk buka modal edit

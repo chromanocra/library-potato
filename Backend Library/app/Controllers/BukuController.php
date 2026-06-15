@@ -31,6 +31,9 @@ class BukuController extends ResourceController
                 'thn_terbit' => $item['tahun_terbit'],
                 'kategori'   => $item['nama_kategori'] ?? '-',
                 'id_kategori' => $item['kategoriID'],
+                'rakID'      => $item['rakID'],
+                'sinopsis'   => $item['sinopsis'],
+                'status_buku'=> $item['status_buku'],
                 'cover'      => $item['cover'],
                 'total_copy' => $item['total_copy'] ?? 0,
                 'avail_copy' => $item['avail_copy'] ?? 0
@@ -59,7 +62,10 @@ class BukuController extends ResourceController
             'penulis'      => $this->request->getPost('pengarang'),
             'penerbit'     => $this->request->getPost('penerbit'),
             'tahun_terbit' => $this->request->getPost('thn_terbit'),
-            'isbn'         => $this->request->getPost('isbn')
+            'isbn'         => $this->request->getPost('isbn'),
+            'rakID'        => $this->request->getPost('rakID'),
+            'sinopsis'     => $this->request->getPost('sinopsis'),
+            'status_buku'  => 'Tersedia'
         ];
 
         $fileCover = $this->request->getFile('cover');
@@ -83,11 +89,13 @@ class BukuController extends ResourceController
             $bukuID = $this->model->getInsertID();
 
             $db = \Config\Database::connect();
+            $stokAwal = (int)$this->request->getPost('stok');
+            if ($stokAwal <= 0) $stokAwal = 0;
 
             $db->table('stok')->insert([
                 'bukuID'        => $bukuID,
-                'total_copy'    => 10,
-                'avail_copy'    => 10,
+                'total_copy'    => $stokAwal,
+                'avail_copy'    => $stokAwal,
                 'borrowed_copy' => 0,
                 'reserved_copy' => 0,
                 'damaged_copy'  => 0,
@@ -122,7 +130,9 @@ class BukuController extends ResourceController
             'penulis'      => $this->request->getPost('pengarang'),
             'penerbit'     => $this->request->getPost('penerbit'),
             'tahun_terbit' => $this->request->getPost('thn_terbit'),
-            'isbn'         => $this->request->getPost('isbn')
+            'isbn'         => $this->request->getPost('isbn'),
+            'rakID'        => $this->request->getPost('rakID'),
+            'sinopsis'     => $this->request->getPost('sinopsis')
         ];
 
         // Proses Update Cover (Opsional)
@@ -177,6 +187,10 @@ class BukuController extends ResourceController
 
         $builder->where('bukuID', $id);
         if ($builder->update(['total_copy' => $totalCopy, 'avail_copy' => $availCopy])) {
+            // Update status_buku based on avail_copy
+            $statusBuku = ((int)$availCopy > 0) ? 'Tersedia' : 'Dipinjam';
+            $this->model->update($id, ['status_buku' => $statusBuku]);
+
             return $this->respond(['status' => 200, 'pesan' => 'Stok buku berhasil diperbarui']);
         }
         

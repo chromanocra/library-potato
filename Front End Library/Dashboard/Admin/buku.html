@@ -365,11 +365,19 @@
                             <input type="file" class="form-control" name="cover" id="addCover" accept="image/*"
                                 required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Kategori</label>
-                            <select class="form-select" id="addKategori" name="kategoriID" required>
-                                <option selected disabled value=""></option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select" id="addKategori" name="kategoriID" required>
+                                    <option selected disabled value=""></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Rak</label>
+                                <select class="form-select" id="addRak" name="rakID">
+                                    <option selected disabled value="">Pilih Rak</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Judul Buku</label>
@@ -389,16 +397,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Tahun Terbit</label>
                                 <input type="number" class="form-control" name="thn_terbit" id="addThnTerbit" min="1900"
                                     max="2099" placeholder="Contoh: 2024" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">ISBN</label>
                                 <input type="text" class="form-control" name="isbn" id="addIsbn"
-                                    placeholder="Nomor ISBN (Opsional)">
+                                    placeholder="Opsional">
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Stok Awal</label>
+                                <input type="number" class="form-control" name="stok" id="addStok" min="0" value="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sinopsis</label>
+                            <textarea class="form-control" name="sinopsis" id="addSinopsis" rows="3" placeholder="Tulis sinopsis buku..."></textarea>
                         </div>
 
                         <div class="modal-footer px-0 pb-0 border-top-0">
@@ -434,9 +450,17 @@
                                 <input type="hidden" id="editCoverLama" name="coverLama">
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Kategori</label>
-                            <select class="form-select" id="editKategori" name="kategoriID" required></select>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select" id="editKategori" name="kategoriID" required></select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Rak</label>
+                                <select class="form-select" id="editRak" name="rakID">
+                                    <option selected disabled value="">Pilih Rak</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Judul Buku</label>
@@ -462,6 +486,10 @@
                                 <label class="form-label">ISBN</label>
                                 <input type="text" class="form-control" name="isbn" id="editIsbn">
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sinopsis</label>
+                            <textarea class="form-control" name="sinopsis" id="editSinopsis" rows="3"></textarea>
                         </div>
 
                         <div class="modal-footer px-0 pb-0 border-top-0">

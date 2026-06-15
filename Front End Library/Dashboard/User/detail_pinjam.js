@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const payload = {
         userID: document.getElementById("userID").value,
+        tanggal_pinjam: sqlTanggalPinjam,
         batas_kembali: sqlBatasKembali,
         buku_yang_dipinjam: [
           {
@@ -188,4 +189,20 @@ function isiFormBuku(book) {
   document.getElementById("pengarang").value = book.pengarang || book.penulis || "-";
   document.getElementById("penerbit").value = book.penerbit || "-";
   document.getElementById("thn_terbit").value = book.thn_terbit || book.tahun_terbit || "-";
+
+  const sisaStok = parseInt(book.avail_copy) || 0;
+  document.getElementById("sisa_stok").value = sisaStok + " Eksemplar";
+
+  const btnSubmit = document.querySelector('#formPeminjaman button[type="submit"]');
+  if (sisaStok <= 0) {
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = '<i class="fas fa-ban me-2"></i> Stok Habis';
+    btnSubmit.classList.remove('btn-success-custom');
+    btnSubmit.classList.add('btn-secondary');
+  } else {
+    btnSubmit.disabled = false;
+    btnSubmit.innerHTML = '<i class="fas fa-paper-plane me-2"></i> Ajukan Pinjaman';
+    btnSubmit.classList.add('btn-success-custom');
+    btnSubmit.classList.remove('btn-secondary');
+  }
 }
