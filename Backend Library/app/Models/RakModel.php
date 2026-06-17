@@ -6,15 +6,16 @@ use CodeIgniter\Model;
 
 class RakModel extends Model
 {
-    // Nama tabel di database
-    protected $table = "rak";
-    // Primary key
-    protected $primaryKey = "rakID";
+    protected $table = 'rak';
+
+    protected $primaryKey = 'id';
+
     protected $useAutoIncrement = true;
 
-    // Kolom yang boleh diisi dari Postman
+    protected $returnType = 'array';
+
     protected $allowedFields = [
-        "nama_rak",
-        "lokasi"
+        'nama_rak',
+        'lokasi'
     ];
 }

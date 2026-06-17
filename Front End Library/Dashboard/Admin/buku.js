@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initHalaman() {
-    const username = localStorage.getItem('username') || 'AdminFapus';
+    const username = localStorage.getItem('username') || 'Admin';
     const userDropdown = document.getElementById('sessUsernameDropdown');
     if (userDropdown) userDropdown.innerText = `Halo, ${username}`;
 }
@@ -181,7 +181,7 @@ async function loadRak() {
 
         let optionsHTML = '<option selected disabled value="">Pilih Rak</option>';
         data.forEach(rak => {
-            optionsHTML += `<option value="${rak.rakID}">${rak.nama_rak} - ${rak.lokasi}</option>`;
+            optionsHTML += `<option value="${rak.id}">${rak.nama_rak} - ${rak.lokasi}</option>`;
         });
 
         if (selectAdd) selectAdd.innerHTML = optionsHTML;
@@ -206,7 +206,7 @@ async function loadBuku() {
         else if (result.data && Array.isArray(result.data)) data = result.data;
 
         if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding: 30px;">Belum ada data buku</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="10" class="text-center" style="padding: 30px;">Belum ada data buku</td></tr>';
             return;
         }
 
@@ -225,6 +225,9 @@ async function loadBuku() {
                     <td>${item.id_buku || '-'}</td>
                     <td class="fw-medium">${item.judul || '-'}</td>
                     <td>${item.pengarang || '-'}</td>
+                    <td>${item.penerbit || '-'}</td>
+                    <td>${item.thn_terbit || '-'}</td>
+                    <td>${item.isbn || '-'}</td>
                     <td>${item.kategori || '-'}</td>
                     <td align="center" style="white-space: nowrap;">
                         <button class="btn-action btn-edit" onclick="bukaModalEdit('${item.id_buku}')" title="Edit Buku">

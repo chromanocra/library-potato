@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Rak - Fapus</title>
+    <title>Data Rak - Perpustakaan</title>
 
     <link rel="icon" href="../../images/s.png" type="image/png">
 
@@ -277,9 +277,9 @@
 
 <body>
 
-<aside class="sidebar">
+    <aside class="sidebar">
         <div class="sidebar-header">
-            <i class="fas fa-book-reader"></i> FAPUS
+            <i class="fas fa-book-reader"></i> Perpustakaan
         </div>
         <ul class="sidebar-menu">
             <li>
@@ -297,7 +297,7 @@
                 <a href="akunUser.html"><i class="fas fa-users"></i> Data Anggota</a>
             </li>
             <li class="active">
-                <a href="rak.html"><i class="fas fa-shelf"></i> Rak</a>
+                <a href="rak.html"><i class="fas fa-th-large fa-fw"></i> Rak</a>
             </li>
             <li>
                 <a href="peminjaman.html"><i class="fas fa-exchange-alt"></i> Peminjaman</a>
@@ -361,24 +361,19 @@
                 </div>
                 <div class="modal-body">
                     <form id="formRak">
-                        <input type="hidden" id="rakID">
+                        <input type="hidden" id="rakID" value="">
 
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label for="inputNamaRak" class="form-label">Nama Rak</label>
-                            <input type="text" name="nama_rak" id="inputNamaRak" required placeholder="Contoh: Rak 01-A"
-                                autocomplete="off" class="form-control">
+                            <input type="text" class="form-control" id="inputNamaRak" required>
                         </div>
-                        <div class="mb-4">
-                            <label for="inputLokasi" class="form-label">Lokasi / Deskripsi</label>
-                            <input type="text" name="lokasi" id="inputLokasi"
-                                placeholder="Contoh: Lantai 1, Dekat Jendela" autocomplete="off" class="form-control">
+                        <div class="mb-3">
+                            <label for="inputLokasi" class="form-label">Lokasi</label>
+                            <input type="text" class="form-control" id="inputLokasi">
                         </div>
 
-                        <div class="modal-footer px-0 pb-0 border-top-0">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" id="btnSubmitRak" class="btn"
-                                style="background-color: #16a34a; color: white;">Simpan Data</button>
-                        </div>
+                        <button type="submit" id="btnSubmitRak" class="btn btn-primary">Simpan Data</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     </form>
                 </div>
             </div>

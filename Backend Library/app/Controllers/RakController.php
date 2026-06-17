@@ -7,13 +7,13 @@ use CodeIgniter\RESTful\ResourceController;
 class RakController extends ResourceController
 {
     protected $modelName = 'App\Models\RakModel';
-    
-    protected $format    = 'json'; 
+
+    protected $format    = 'json';
 
     public function index()
     {
         $data = $this->model->findAll();
-        
+
         return $this->respond([
             'status' => 200,
             'pesan'  => 'Berhasil mengambil data Rak',
@@ -24,7 +24,7 @@ class RakController extends ResourceController
     public function show($id = null)
     {
         $data = $this->model->find($id);
-        
+
         if ($data) {
             return $this->respond([
                 'status' => 200,
@@ -38,7 +38,12 @@ class RakController extends ResourceController
 
     public function create()
     {
-        $data = $this->request->getJSON();
+        $json = $this->request->getJSON();
+
+        $data = [
+            'nama_rak' => $json->nama_rak ?? '',
+            'lokasi'   => $json->lokasi ?? ''
+        ];
 
         if ($this->model->insert($data)) {
             return $this->respondCreated([
@@ -53,28 +58,45 @@ class RakController extends ResourceController
 
     public function update($id = null)
     {
-        $data = $this->request->getJSON();
+        // WAJIB menggunakan getJSON() karena frontend mengirim data via fetch API 'application/json'
+        $json = $this->request->getJSON();
 
-        if ($this->model->update($id, $data)) {
-            return $this->respond([
-                'status' => 200,
-                'pesan'  => 'Rak berhasil diupdate',
-                'data'   => $data
-            ]);
+        // Cek apakah data JSON berhasil ditangkap
+        if ($json) {
+            $data = [
+                'nama_rak' => $json->nama_rak,
+                'lokasi'   => $json->lokasi
+            ];
+        } else {
+            // Fallback jika dikirim lewat format lain
+            $data = [
+                'nama_rak' => $this->request->getRawInputVar('nama_rak'),
+                'lokasi'   => $this->request->getRawInputVar('lokasi')
+            ];
         }
 
-        return $this->fail($this->model->errors());
+        // Lakukan proses update ke database menggunakan Model
+        $this->model->update($id, $data);
+
+        return $this->respond([
+            'status' => 200,
+            'pesan' => 'Data rak berhasil diupdate'
+        ]);
     }
 
     public function delete($id = null)
     {
-        if ($this->model->delete($id)) {
+        // Pastikan ID ada dan valid
+        if ($id) {
+            // Eksekusi hapus ke database
+            $this->model->delete($id);
+
             return $this->respondDeleted([
                 'status' => 200,
-                'pesan'  => 'Rak berhasil dihapus',
+                'pesan' => 'Data rak berhasil dihapus'
             ]);
         }
 
-        return $this->failNotFound("Rak dengan ID $id tidak ditemukan");
+        return $this->failNotFound('ID Rak tidak ditemukan');
     }
 }

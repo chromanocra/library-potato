@@ -25,12 +25,11 @@ $routes->group("api", function ($routes) {
     $routes->put("kategori/(:num)", 'KategoriController::update/$1'); // routes masuk ke method update($id) di KategoriController untuk update kategori berdasarkan ID
     $routes->delete("kategori/(:num)", 'KategoriController::delete/$1'); //routes masuk ke method delete($id) di KategoriController untuk delete kategori berdasarkan ID
 
-  
-    $routes->get("rak", "RakController::index");
-    $routes->get("rak/(:num)", "RakController::show/$1");
-    $routes->post("rak", "RakController::create");
-    $routes->put("rak/(:num)", "RakController::update/$1");
-    $routes->delete("rak/(:num)", "RakController::delete/$1");
+    $routes->get('rak', 'RakController::index');
+    $routes->get('rak/(:num)', 'RakController::show/$1');
+    $routes->post('rak', 'RakController::create');
+    $routes->put('rak/(:num)', 'RakController::update/$1');
+    $routes->delete('rak/(:num)', 'RakController::delete/$1');
 
     $routes->get("pengguna", "PenggunaController::index"); // routes masuk ke method index() di PenggunaController untuk menampilkan semua pengguna
     $routes->post("pengguna/register", "PenggunaController::register"); // routes masuk ke method register() di PenggunaController untuk registrasi pengguna baru
@@ -52,7 +51,7 @@ $routes->group("api", function ($routes) {
     $routes->get("peminjaman", "PeminjamanController::index");
     $routes->post("peminjaman", "PeminjamanController::create");
     $routes->post("peminjaman/manual", "PeminjamanController::manual");
-    
+
     // Rute dengan parameter spesifik diletakkan sebelum :num generik
     $routes->get(
         "peminjaman/user/(:any)",
@@ -77,5 +76,4 @@ $routes->group("api", function ($routes) {
 
     // ── FITUR 2: Analytics Dashboard ─────────────────────────────────────────
     $routes->get("analytics", "AnalyticsController::index");
-
 });

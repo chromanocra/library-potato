@@ -21,10 +21,12 @@ async function loadDataRak() {
             $('#dataTable').DataTable().destroy();
         }
 
-        tbody.innerHTML = '';
+        tbody.innerHTML = ''; // Pastikan tabel dibersihkan
+
+        // Hanya masukkan data jika ada (TIDAK PERLU membuat <tr> untuk pesan kosong)
         if (result.data && result.data.length > 0) {
             result.data.forEach((rak, index) => {
-                const idRak = rak.rakID || rak.id_rak || rak.id;
+                const idRak = rak.id || rak.id || rak.id;
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -42,20 +44,33 @@ async function loadDataRak() {
                 `;
                 tbody.appendChild(tr);
             });
-        } else {
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">Belum ada data rak.</td></tr>`;
         }
 
-        // Inisialisasi ulang DataTables setelah data masuk ke tabel
+        // Inisialisasi ulang DataTables setelah data masuk (atau kosong)
         $('#dataTable').DataTable({
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json"
+                "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json",
+                // Tambahkan pesan custom di sini agar DataTables yang mengaturnya secara aman
+                "emptyTable": "Belum ada data rak."
             }
         });
 
     } catch (error) {
         console.error('Error load rak:', error);
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center text">Belum ada data rak</td></tr>`;
+
+        // Jika DataTable belum diinisialisasi, kita cegah error tampilan
+        if ($.fn.DataTable.isDataTable('#dataTable')) {
+            $('#dataTable').DataTable().destroy();
+        }
+        tbody.innerHTML = '';
+
+        // Buat DataTable menampilkan pesan error gagal memuat
+        $('#dataTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Indonesian.json",
+                "emptyTable": "Gagal memuat data dari server."
+            }
+        });
     }
 }
 
@@ -69,7 +84,7 @@ function bukaModalTambahRak() {
 
 // 3. Buka Modal Edit (Nama fungsi disesuaikan dengan tombol aksi tabel)
 function bukaModalEditRak(id, nama_rak, lokasi) {
-    document.getElementById('rakID').value = id; 
+    document.getElementById('rakID').value = id;
     document.getElementById('inputNamaRak').value = nama_rak; // Sesuai HTML: inputNamaRak
     document.getElementById('inputLokasi').value = lokasi;   // Sesuai HTML: inputLokasi
     document.getElementById('modalRakTitle').innerText = 'Edit Rak';
@@ -79,6 +94,9 @@ function bukaModalEditRak(id, nama_rak, lokasi) {
 // 4. Simpan Data (POST untuk Tambah, PUT untuk Edit)
 async function simpanRak(e) {
     e.preventDefault();
+
+    // Tambahkan baris ini untuk mengecek apakah fungsi dipanggil
+    console.log("Fungsi simpanRak berhasil dipanggil!");
 
     const btnSubmit = document.getElementById('btnSubmitRak');
     btnSubmit.disabled = true;

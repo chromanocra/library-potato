@@ -191,7 +191,7 @@ function isiFormBuku(book) {
   document.getElementById("thn_terbit").value = book.thn_terbit || book.tahun_terbit || "-";
 
   const sisaStok = parseInt(book.avail_copy) || 0;
-  document.getElementById("sisa_stok").value = sisaStok + " Eksemplar";
+  document.getElementById("sisa_stok").value = sisaStok + " Buku Tersedia";
 
   const btnSubmit = document.querySelector('#formPeminjaman button[type="submit"]');
   if (sisaStok <= 0) {

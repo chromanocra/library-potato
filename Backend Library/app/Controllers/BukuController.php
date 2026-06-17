@@ -29,11 +29,12 @@ class BukuController extends ResourceController
                 'pengarang'  => $item['penulis'], // JS membaca 'pengarang'
                 'penerbit'   => $item['penerbit'],
                 'thn_terbit' => $item['tahun_terbit'],
+                'isbn'       => $item['isbn'],
                 'kategori'   => $item['nama_kategori'] ?? '-',
                 'id_kategori' => $item['kategoriID'],
                 'rakID'      => $item['rakID'],
                 'sinopsis'   => $item['sinopsis'],
-                'status_buku'=> $item['status_buku'],
+                'status_buku' => $item['status_buku'],
                 'cover'      => $item['cover'],
                 'total_copy' => $item['total_copy'] ?? 0,
                 'avail_copy' => $item['avail_copy'] ?? 0
@@ -177,12 +178,12 @@ class BukuController extends ResourceController
     {
         $db = \Config\Database::connect();
         $builder = $db->table('stok');
-        
+
         $totalCopy = $this->request->getPost('total_copy');
         $availCopy = $this->request->getPost('avail_copy');
 
         if ($totalCopy === null || $availCopy === null) {
-             return $this->fail('total_copy dan avail_copy harus diisi', 400);
+            return $this->fail('total_copy dan avail_copy harus diisi', 400);
         }
 
         $builder->where('bukuID', $id);
@@ -193,7 +194,7 @@ class BukuController extends ResourceController
 
             return $this->respond(['status' => 200, 'pesan' => 'Stok buku berhasil diperbarui']);
         }
-        
+
         return $this->fail('Gagal memperbarui stok', 500);
     }
 }
