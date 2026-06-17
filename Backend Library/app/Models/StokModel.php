@@ -12,7 +12,6 @@ class StokModel extends Model
         "total_copy",
         "avail_copy",
         "borrowed_copy",
-        "reserved_copy",
         "damaged_copy",
         "lost_copy",
     ];

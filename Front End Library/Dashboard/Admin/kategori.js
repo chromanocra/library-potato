@@ -1,4 +1,19 @@
 // assets/js/kategori.js
+const sessionRaw = localStorage.getItem("user_logged_in");
+
+if (!sessionRaw) {
+    // Belum login sama sekali → tendang ke halaman login
+    alert("Akses ditolak! Silakan login terlebih dahulu.");
+    window.location.href = "../Login/login.html";
+} else {
+    const dataUser = JSON.parse(sessionRaw);
+
+    if (dataUser.role !== "admin") {
+        // Role bukan admin → tidak boleh masuk halaman ini
+        alert("Anda tidak memiliki akses ke halaman Admin!");
+        window.location.href = "../Dashboard/dashboard.html";
+    }
+}
 
 const API_URL = "http://localhost:8080/api";
 
@@ -9,12 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Form Tambah Kategori
     const formKategori = document.getElementById('formKategori');
     if (formKategori) {
-        formKategori.addEventListener('submit', async function(e) {
+        formKategori.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const kategori = document.getElementById('inputKategori').value;
             const btnSubmit = this.querySelector('button[type="submit"]');
-            
+
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = 'Menyimpan...';
 
@@ -33,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const modalEl = document.getElementById('modalTambahKategori');
                     const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
                     modalInstance.hide();
-                    
+
                     this.reset();
                     loadKategori();
                     alert('Data berhasil ditambah.');
@@ -45,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Terjadi kesalahan jaringan saat menambahkan kategori.');
             } finally {
                 btnSubmit.disabled = false;
-                btnSubmit.innerHTML = 'Simpan Data'; 
+                btnSubmit.innerHTML = 'Simpan Data';
             }
         });
     }
@@ -53,9 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Logout
     const btnLogout = document.getElementById('btnLogout');
     if (btnLogout) {
-        btnLogout.addEventListener('click', function(e) {
+        btnLogout.addEventListener('click', function (e) {
             e.preventDefault();
-            if(confirm('Apakah Anda yakin ingin logout?')) {
+            if (confirm('Apakah Anda yakin ingin logout?')) {
                 localStorage.clear();
                 window.location.href = '../../Index Utama/index.html';
             }
@@ -68,7 +83,7 @@ function initHalaman() {
     const dateObj = new Date();
     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
     const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    
+
     const dateElement = document.getElementById('currentDate');
     if (dateElement) {
         dateElement.innerText = `${days[dateObj.getDay()]}, ${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
@@ -92,11 +107,11 @@ async function loadKategori() {
 
     try {
         const response = await fetch(`${API_URL}/kategori`);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const result = await response.json();
 
         // Mengambil array data dari object response (untuk menghindari foreach error)
@@ -106,7 +121,7 @@ async function loadKategori() {
         } else if (result.data && Array.isArray(result.data)) {
             data = result.data;
         } else if (result.messages && Array.isArray(result.messages)) {
-            data = result.messages; 
+            data = result.messages;
         } else {
             console.error("Format data tidak dikenali:", result);
             throw new Error("Format data tidak sesuai");

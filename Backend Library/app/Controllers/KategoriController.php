@@ -5,13 +5,10 @@ use CodeIgniter\RESTful\ResourceController;
 
 class KategoriController extends ResourceController
 {
-    // Kasih tahu Controller ini pakai Model yang mana
     protected $modelName = 'App\Models\KategoriModel';
     
-    // Set format output ke JSON (Wajib untuk API)
     protected $format    = 'json'; 
 
-    // 1. Endpoint: GET /api/kategori (Menampilkan semua kategori)
     public function index()
     {
         $data = $this->model->findAll();

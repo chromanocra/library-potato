@@ -7,3 +7,4 @@ Backend Library/public/uploads/cover/*
 !Backend Library/writable/cache/index.html
 !Backend Library/writable/session/index.html
 !Backend Library/public/uploads/cover/index.html
+Backend Library/.env

@@ -1,445 +1,417 @@
 <!doctype html>
 <html lang="id">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Perpustakaan</title>
-        <meta name="keywords" content="perpustakaan, buku, fapus" />
-        <meta name="description" content="Fasilitas Perpustakaan Digital" />
-        <meta name="author" content="" />
 
-        <link rel="icon" href="../images/fevicon.png" type="image/png" />
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="../css2/bootstrap.min.css"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,800;1,400&family=Sen:wght@400;700;800&display=swap"
-            rel="stylesheet"
-        />
-        <link rel="stylesheet" href="../css2/jquery.mCustomScrollbar.min.css" />
-        <link rel="stylesheet" type="text/css" href="../css2/style.css" />
-        <link rel="stylesheet" href="../css2/responsive.css" />
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perpustakaan</title>
+    <meta name="keywords" content="perpustakaan, buku, fapus" />
+    <meta name="description" content="Fasilitas Perpustakaan Digital" />
+    <meta name="author" content="" />
 
-        <style>
-            body {
-                background: linear-gradient(rgba(244, 252, 247, 0.88), rgba(230, 244, 234, 0.92)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat fixed;
-                color: #333333;
-                font-family: "Poppins", sans-serif;
-                min-height: 100vh;
-            }
-            .sidebar {
-                display: none !important;
-            }
-            .content {
-                margin-left: 0 !important;
-            }
-            .header_section {
-                background-color: #1a8a42;
-                border-bottom: 2px solid #1a8a42;
-            }
-            .navbar-brand img {
-                height: 65px;
-            }
-            .banner_taital {
-                font-size: 42px;
-                font-weight: 800;
-                color: #000000;
-                line-height: 1.3;
-            }
-            .btn_main {
-                display: flex;
-                gap: 15px;
-                margin-top: 25px;
-            }
-            .started_text a {
-                display: inline-block;
-                padding: 10px 30px;
-                background-color: #1a8a42;
-                color: #ffffff;
-                border-radius: 30px;
-                text-decoration: none;
-                font-weight: 600;
-                transition: 0.3s;
-            }
-            .started_text a:hover {
-                background-color: #146c34;
-                color: #fff;
-            }
-            .banner_img img {
-                max-width: 85%;
-                margin-left: 120px;
-                border-radius: 12px;
-            }
-            .alert-danger {
-                background-color: rgba(235, 22, 22, 0.15);
-                border: 1px solid #eb1616;
-                color: #ff6b6b;
-                border-radius: 8px;
-            }
-            .layout-card-custom {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1.5rem;
-                padding: 20px 15px;
-            }
-            .card {
-                background-color: #1a8a42;
-                border: 1px solid #1a8a42;
-                border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-                transition:
-                    transform 0.3s ease,
-                    box-shadow 0.3s ease;
-                overflow: hidden;
-                color: #ffffff;
-                cursor: pointer;
-            }
-            .card:hover {
-                transform: translateY(-6px);
-                box-shadow: 0 10px 25px rgba(235, 22, 22, 0.3);
-            }
-            .card-img-top {
-                height: 180px;
-                object-fit: cover;
-                transition: transform 0.3s ease;
-            }
-            .card-img-top:hover {
-                transform: scale(1.05);
-            }
-            .card-body {
-                padding: 10px;
-            }
-            .card-title {
-                font-size: 0.85rem;
-                font-weight: 600;
-                text-align: center;
-                color: #ffffff;
-                margin: 0;
-            }
-            .list-group-item {
-                background-color: #1a8a42;
-                color: #ffffff;
-                border-color: #5e5e7e;
-                font-size: 0.75rem;
-                text-align: center;
-            }
-            .modal-content {
-                background-color: #1a1a2e;
-                color: #ffffff;
-                border: 1px solid #2a2a3e;
-                border-radius: 12px;
-            }
-            .modal-header {
-                border-bottom: 1px solid #2a2a3e;
-            }
-            .modal-footer {
-                border-top: 1px solid #2a2a3e;
-            }
-            .footer_section {
-                background-color: #000000;
-                padding: 40px 0;
-                margin-top: 60px;
-                border-top: 2px solid #000000;
-            }
-            .footer_text {
-                color: #ffffff;
-                font-size: 18px;
-                text-align: center;
-                font-weight: 700;
-                margin-bottom: 15px;
-            }
-            .footer_menu ul {
-                list-style: none;
-                padding: 0;
-            }
-            .footer_menu ul li a,
-            .dummy_text {
-                color: #aaaaaa;
-                text-align: center;
-                text-decoration: none;
-                font-size: 14px;
-            }
-            .footer_menu ul li a:hover {
-                color: #1a8a42;
-                justify-content: center;
-            }
-            .social_icon ul {
-                list-style: none;
-                padding: 0;
-                display: flex;
-                gap: 15px;
-                justify-content: center;
-            }
-            .social_icon ul li a {
-                color: #aaaaaa;
-                font-size: 20px;
-                transition: 0.3s;
-            }
-            .social_icon ul li a:hover {
-                color: #1a8a42;
-            }
-            .copyright_section {
-                background-color: #0a0a0a;
-                padding: 15px 0;
-            }
-            .copyright_text {
-                text-align: center;
-                color: #666666;
-                font-size: 13px;
-                margin: 0;
-            }
-            .copyright_text a {
-                color: #eb1616;
-                text-decoration: none;
-            }
-        </style>
-    </head>
+    <link rel="icon" href="../images/fevicon.png" type="image/png" />
+    <link rel="stylesheet" type="text/css" href="../css2/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,800;1,400&family=Sen:wght@400;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css2/jquery.mCustomScrollbar.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css2/style.css" />
+    <link rel="stylesheet" href="../css2/responsive.css" />
 
-    <body>
-        <div class="header_section">
-            <div class="container-fluid">
-                <nav class="navbar navbar-expand-lg">
-                    <a class="navbar-brand" href="index.html">
-                        <img src="../images/s.png" alt="Logo Fapus" />
-                    </a>
-                    <button
-                        class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </nav>
-            </div>
+    <style>
+        body {
+            background: linear-gradient(rgba(244, 252, 247, 0.88), rgba(230, 244, 234, 0.92)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat fixed;
+            color: #333333;
+            font-family: "Poppins", sans-serif;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            display: none !important;
+        }
+
+        .content {
+            margin-left: 0 !important;
+        }
+
+        .header_section {
+            background-color: #1a8a42;
+            border-bottom: 2px solid #1a8a42;
+        }
+
+        .navbar-brand img {
+            height: 65px;
+        }
+
+        .banner_taital {
+            font-size: 42px;
+            font-weight: 800;
+            color: #000000;
+            line-height: 1.3;
+        }
+
+        .btn_main {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .started_text a {
+            display: inline-block;
+            padding: 10px 30px;
+            background-color: #1a8a42;
+            color: #ffffff;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .started_text a:hover {
+            background-color: #146c34;
+            color: #fff;
+        }
+
+        .banner_img img {
+            max-width: 85%;
+            margin-left: 120px;
+            border-radius: 12px;
+        }
+
+        .alert-danger {
+            background-color: rgba(235, 22, 22, 0.15);
+            border: 1px solid #eb1616;
+            color: #ff6b6b;
+            border-radius: 8px;
+        }
+
+        .layout-card-custom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 20px 15px;
+        }
+
+        .card {
+            background-color: #1a8a42;
+            border: 1px solid #1a8a42;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+            overflow: hidden;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(235, 22, 22, 0.3);
+        }
+
+        .card-img-top {
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card-img-top:hover {
+            transform: scale(1.05);
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .list-group-item {
+            background-color: #1a8a42;
+            color: #ffffff;
+            border-color: #5e5e7e;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .modal-content {
+            background-color: #1a1a2e;
+            color: #ffffff;
+            border: 1px solid #2a2a3e;
+            border-radius: 12px;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #2a2a3e;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #2a2a3e;
+        }
+
+        .footer_section {
+            background-color: #000000;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 2px solid #000000;
+        }
+
+        .footer_text {
+            color: #ffffff;
+            font-size: 18px;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .footer_menu ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer_menu ul li a,
+        .dummy_text {
+            color: #aaaaaa;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer_menu ul li a:hover {
+            color: #1a8a42;
+            justify-content: center;
+        }
+
+        .social_icon ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .social_icon ul li a {
+            color: #aaaaaa;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .social_icon ul li a:hover {
+            color: #1a8a42;
+        }
+
+        .copyright_section {
+            background-color: #0a0a0a;
+            padding: 15px 0;
+        }
+
+        .copyright_text {
+            text-align: center;
+            color: #666666;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .copyright_text a {
+            color: #eb1616;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header_section">
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="index.html">
+                    <img src="../images/s.png" alt="Logo Fapus" />
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
         </div>
+    </div>
 
-        <div class="container-fluid px-0">
-            <div class="banner_section">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-sm-6">
-                            <div class="banner_taital_main">
-                                <h1 class="banner_taital">
-                                    Selamat Datang<br />di
-                                    <span style="color: #0a0a0a">Perpus</span>
-                                </h1>
-                                <p style="color: #aaaaaa; margin-top: 15px">
-                                    Temukan ribuan koleksi buku pilihan kami
-                                    untuk menambah wawasanmu.
-                                </p>
-                                <div class="btn_main">
-                                    <div class="started_text">
-                                        <a href="../Login/login.html">Login</a>
-                                    </div>
-                                    <div class="started_text">
-                                        <a
-                                            href="../Register/register.html"
-                                            style="
+    <div class="container-fluid px-0">
+        <div class="banner_section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <div class="banner_taital_main">
+                            <h1 class="banner_taital">
+                                Selamat Datang<br />di
+                                <span style="color: #0a0a0a">Perpus</span>
+                            </h1>
+                            <p style="color: #aaaaaa; margin-top: 15px">
+                                Temukan ribuan koleksi buku pilihan kami
+                                untuk menambah wawasanmu.
+                            </p>
+                            <div class="btn_main">
+                                <div class="started_text">
+                                    <a href="../Login/login.html">Login</a>
+                                </div>
+                                <div class="started_text">
+                                    <a href="../Register/register.html" style="
                                                 background-color: #1a8a42;
                                                 border: 1px solid #1a8a42;
-                                            "
-                                            >Register</a
-                                        >
-                                    </div>
+                                            ">Register</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-5 mt-5 mt-sm-0">
-                            <div class="banner_img text-center">
-                                <img
-                                    src="../images/a.png"
-                                    alt="Banner Perpustakaan"
-                                />
-                            </div>
+                    </div>
+                    <div class="col-sm-5 mt-5 mt-sm-0">
+                        <div class="banner_img text-center">
+                            <img src="../images/a.png" alt="Banner Perpustakaan" />
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="container mt-4">
-                <div class="alert alert-danger text-center" role="alert">
-                    <strong
-                        >Jika Anda Ingin Mencari Buku, Diharuskan Login Terlebih
-                        Dahulu</strong
-                    >
-                </div>
-            </div>
-
-            <div class="layout-card-custom" id="booksContainer">
-                <div class="text-center w-100 py-5">
-                    <p style="color: #aaaaaa">Memuat data buku...</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Single Modal -->
-        <div
-            class="modal fade"
-            id="modalDetailBuku"
-            tabindex="-1"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Detail Buku</h5>
-                        <button
-                            type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-4 text-center mb-3">
-                                <img
-                                    id="detailCover"
-                                    src=""
-                                    class="img-fluid rounded"
-                                    alt="Cover"
-                                    style="max-height: 250px; object-fit: cover"
-                                />
-                            </div>
-                            <div class="col-md-8">
-                                <table
-                                    class="table table-borderless"
-                                    style="color: #ffffff"
-                                >
-                                    <tr>
-                                        <td><strong>Judul</strong></td>
-                                        <td id="detailJudul">: -</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Kategori</strong></td>
-                                        <td id="detailKategori">: -</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Pengarang</strong></td>
-                                        <td id="detailPengarang">: -</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Penerbit</strong></td>
-                                        <td id="detailPenerbit">: -</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Tahun Terbit</strong></td>
-                                        <td id="detailTahun">: -</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Jml. Halaman</strong></td>
-                                        <td id="detailHalaman">: -</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Deskripsi</strong></td>
-                                        <td id="detailDeskripsi">: -</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-success" onclick="alertPinjam()">Pinjam</button>
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        >
-                            Tutup
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="footer_section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <h3 class="footer_text">Alamat</h3>
-                        <div class="footer_menu">
-                            <ul>
-                                <p class="dummy_text">
-                                    Jl. Margonda Raya No.8, Pondok Cina,
-                                    Kecamatan Beji, Kota Depok, Jawa Barat 16422
-                                </p>
-                                <li>
-                                    <a
-                                        href="https://www.google.com/maps/@-6.3974567,106.8825406,3a"
-                                        target="_blank"
-                                        ><i
-                                            class="fas fa-map-marker-alt me-1"
-                                        ></i>
-                                        Lihat Maps</a
-                                    >
-                                </li>
-                            </ul>
+        <div class="container mt-4">
+            <div class="alert alert-danger text-center" role="alert">
+                <strong>Jika Anda Ingin Mencari Buku, Diharuskan Login Terlebih
+                    Dahulu</strong>
+            </div>
+        </div>
+
+        <div class="layout-card-custom" id="booksContainer">
+            <div class="text-center w-100 py-5">
+                <p style="color: #aaaaaa">Memuat data buku...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Single Modal -->
+    <div class="modal fade" id="modalDetailBuku" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Buku</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <img id="detailCover" src="" class="img-fluid rounded" alt="Cover"
+                                style="max-height: 250px; object-fit: cover" />
+                        </div>
+                        <div class="col-md-8">
+                            <table class="table table-borderless" style="color: #ffffff">
+                                <tr>
+                                    <td><strong>Judul</strong></td>
+                                    <td id="detailJudul">: -</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kategori</strong></td>
+                                    <td id="detailKategori">: -</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pengarang</strong></td>
+                                    <td id="detailPengarang">: -</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Penerbit</strong></td>
+                                    <td id="detailPenerbit">: -</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tahun Terbit</strong></td>
+                                    <td id="detailTahun">: -</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Jml. Halaman</strong></td>
+                                    <td id="detailHalaman">: -</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deskripsi</strong></td>
+                                    <td id="detailDeskripsi">: -</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <h3 class="footer_text">Media Sosial</h3>
-                        <div class="social_icon">
-                            <ul>
-                                <li>
-                                    <a
-                                        href="https://github.com/Fatih2704"
-                                        target="_blank"
-                                        ><i class="fab fa-github"></i
-                                    ></a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://api.whatsapp.com/send/?phone=%2B6285692569477"
-                                        target="_blank"
-                                        ><i class="fab fa-whatsapp"></i
-                                    ></a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="https://www.instagram.com/mfh_fatt/"
-                                        target="_blank"
-                                        ><i class="fab fa-instagram"></i
-                                    ></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-12">
-                        <h3 class="footer_text">Telepon</h3>
-                        <p class="dummy_text">+62 856 9256 9477</p>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="alertPinjam()">Pinjam</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Tutup
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="copyright_section">
-            <div class="container">
-                <p class="copyright_text">
-                    2026 All Rights Reserved. Design by
-                    <a href="#">Perpustakaan CI4</a>
-                </p>
+    <div class="footer_section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <h3 class="footer_text">Alamat</h3>
+                    <div class="footer_menu">
+                        <ul>
+                            <p class="dummy_text">
+                                Jl. Margonda Raya No.8, Pondok Cina,
+                                Kecamatan Beji, Kota Depok, Jawa Barat 16422
+                            </p>
+                            <li>
+                                <a href="https://www.google.com/maps/@-6.3974567,106.8825406,3a" target="_blank"><i
+                                        class="fas fa-map-marker-alt me-1"></i>
+                                    Lihat Maps</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <h3 class="footer_text">Media Sosial</h3>
+                    <div class="social_icon">
+                        <ul>
+                            <li>
+                                <a href="https://github.com/Fatih2704" target="_blank"><i class="fab fa-github"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://api.whatsapp.com/send/?phone=%2B6285692569477" target="_blank"><i
+                                        class="fab fa-whatsapp"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/mfh_fatt/" target="_blank"><i
+                                        class="fab fa-instagram"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <h3 class="footer_text">Telepon</h3>
+                    <p class="dummy_text">+62 856 9256 9477</p>
+                </div>
             </div>
         </div>
+    </div>
 
-        <script src="../js/jquery.min.js"></script>
-        <!-- Bootstrap 5 CDN — memastikan bootstrap.Modal tersedia untuk modal detail buku -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="copyright_section">
+        <div class="container">
+            <p class="copyright_text">
+                2026 All Rights Reserved. Design by
+                <a href="#">Perpustakaan CI4</a>
+            </p>
+        </div>
+    </div>
 
-        <!-- CATATAN: script ../assets/js/home.js DIHAPUS karena file tidak ada (404)
+    <script src="../js/jquery.min.js"></script>
+    <!-- Bootstrap 5 CDN — memastikan bootstrap.Modal tersedia untuk modal detail buku -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- CATATAN: script ../assets/js/home.js DIHAPUS karena file tidak ada (404)
        dan isinya sama dengan index.js di bawah — duplikasi menyebabkan
        'Cannot redeclare const API_URL' SyntaxError yang memblokir seluruh JS. -->
-        <script src="index.js"></script>
-    </body>
+    <script src="index.js"></script>
+</body>
+
 </html>

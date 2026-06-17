@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Buku - Fapus</title>
+    <title>Data Buku - Perpustakaan</title>
 
     <link rel="icon" href="../../images/s.png" type="image/png">
 
@@ -272,24 +272,40 @@
     </style>
 </head>
 
-<body>
-    <aside class="sidebar">
+<aside class="sidebar">
         <div class="sidebar-header">
-            <i class="fas fa-book-reader"></i> FAPUS
+            <i class="fas fa-book-reader"></i> Perpustakaan
         </div>
         <ul class="sidebar-menu">
-            <li><a href="dashboard_admin.html"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li class="active"><a href="buku.html"><i class="fas fa-book"></i> Data Buku</a></li>
-            <li><a href="kategori.html"><i class="fas fa-tags"></i> Data Kategori</a></li>
-            <li><a href="akunUser.html"><i class="fas fa-users"></i> Data Anggota</a></li>
-            <li><a href="reservasi.html"><i class="fas fa-calendar-check"></i> Reservasi</a></li>
-            <li><a href="peminjaman.html"><i class="fas fa-exchange-alt"></i> Peminjaman</a></li>
-            <li><a href="#"><i class="fas fa-file-alt"></i> Laporan</a></li>
+            <li>
+                <a href="dashboard_admin.html"><i class="fas fa-home"></i> Dashboard</a>
+            </li>
+            <li class="active">
+                <a href="buku.html"><i class="fas fa-book"></i> Data Buku</a>
+            </li>
+            <li> <a href="stok.html"><i class="fas fa-boxes"></i> Data Stok</a>
+            </li>            
+            <li>
+                <a href="kategori.html"><i class="fas fa-tags"></i> Data Kategori</a>
+            </li>
+            <li>
+                <a href="akunUser.html"><i class="fas fa-users"></i> Data Anggota</a>
+            </li>
+            <li>
+                <a href="rak.html"><i class="fas fa-th-large fa-fw"></i> Rak</a>
+            </li>
+            <li>
+                <a href="peminjaman.html"><i class="fas fa-exchange-alt"></i> Peminjaman</a>
+            </li>
+            <li>
+                <a href="laporan.html"><i class="fas fa-file-alt"></i> Laporan</a>
+            </li>
         </ul>
         <div class="logout-btn">
-            <a href="#" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+            <a href="#" id="btn-logout"><i class="fas fa-sign-out-alt"></i> Keluar</a>
         </div>
     </aside>
+
 
     <main class="main-content">
         <header class="topbar">
@@ -318,14 +334,17 @@
                                 <th style="text-align: center;">Cover</th>
                                 <th>ID Buku</th>
                                 <th>Judul</th>
-                                <th>Pengarang</th>
+                                <th>Penulis</th>
+                                <th>Penerbit</th>
+                                <th>Tahun Terbit</th>
+                                <th>ISBN</th>
                                 <th>Kategori</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tableBukuBody">
                             <tr>
-                                <td colspan="7" class="text-center" style="padding: 30px !important; color: #6b7280;">
+                                <td colspan="11" class="text-center" style="padding: 30px !important; color: #6b7280;">
                                     Loading data...</td>
                             </tr>
                         </tbody>
@@ -349,11 +368,19 @@
                             <input type="file" class="form-control" name="cover" id="addCover" accept="image/*"
                                 required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Kategori</label>
-                            <select class="form-select" id="addKategori" name="kategoriID" required>
-                                <option selected disabled value=""></option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select" id="addKategori" name="kategoriID" required>
+                                    <option selected disabled value=""></option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Rak</label>
+                                <select class="form-select" id="addRak" name="rakID">
+                                    <option selected disabled value="">Pilih Rak</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Judul Buku</label>
@@ -373,16 +400,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">Tahun Terbit</label>
                                 <input type="number" class="form-control" name="thn_terbit" id="addThnTerbit" min="1900"
                                     max="2099" placeholder="Contoh: 2024" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label class="form-label">ISBN</label>
                                 <input type="text" class="form-control" name="isbn" id="addIsbn"
-                                    placeholder="Nomor ISBN (Opsional)">
+                                    placeholder="Opsional">
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Stok Awal</label>
+                                <input type="number" class="form-control" name="stok" id="addStok" min="0" value="1" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sinopsis</label>
+                            <textarea class="form-control" name="sinopsis" id="addSinopsis" rows="3" placeholder="Tulis sinopsis buku..."></textarea>
                         </div>
 
                         <div class="modal-footer px-0 pb-0 border-top-0">
@@ -418,9 +453,17 @@
                                 <input type="hidden" id="editCoverLama" name="coverLama">
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Kategori</label>
-                            <select class="form-select" id="editKategori" name="kategoriID" required></select>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Kategori</label>
+                                <select class="form-select" id="editKategori" name="kategoriID" required></select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Rak</label>
+                                <select class="form-select" id="editRak" name="rakID">
+                                    <option selected disabled value="">Pilih Rak</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Judul Buku</label>
@@ -447,11 +490,42 @@
                                 <input type="text" class="form-control" name="isbn" id="editIsbn">
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sinopsis</label>
+                            <textarea class="form-control" name="sinopsis" id="editSinopsis" rows="3"></textarea>
+                        </div>
 
                         <div class="modal-footer px-0 pb-0 border-top-0">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             <button type="submit" class="btn btn-warning text-white"><i class="fa fa-save me-1"></i>
                                 Update Data</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditStok" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Kelola Stok Buku</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditStok">
+                        <div class="mb-3">
+                            <label class="form-label">Total Copy</label>
+                            <input type="number" class="form-control" name="total_copy" id="editTotalCopy" min="0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Available Copy</label>
+                            <input type="number" class="form-control" name="avail_copy" id="editAvailCopy" min="0" required>
+                        </div>
+                        <div class="modal-footer px-0 pb-0 border-top-0">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-info text-white" style="background-color: #0ea5e9;">Update Stok</button>
                         </div>
                     </form>
                 </div>

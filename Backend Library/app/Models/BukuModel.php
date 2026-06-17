@@ -13,12 +13,15 @@ class BukuModel extends Model
     // Disinkronkan dengan kolom di database phpMyAdmin Anda
     protected $allowedFields = [
         "kategoriID",
+        "rakID",
         "judul_buku",
+        "sinopsis",
         "cover",
         "penulis",
         "penerbit",
         "tahun_terbit",
-        "isbn"
+        "isbn",
+        "status_buku"
     ];
 
     protected $useTimestamps = true;

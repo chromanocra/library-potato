@@ -164,22 +164,42 @@ async function muatDataBuku(filterKataKunci = "") {
                             <div class="fw-semibold text-dark flex-grow-1" style="font-size: 0.95rem;">${item.penerbit || '-'}</div>
                           </div>
                           
-                          <div class="d-flex align-items-center">
-                            <div class="text-center" style="width: 35px; color: #1a8a42;"><i class="fas fa-calendar-alt"></i></div>
-                            <div class="text-muted" style="width: 100px; font-size: 0.9rem;">Tahun</div>
-                            <div class="fw-semibold text-dark flex-grow-1" style="font-size: 0.95rem;">${item.thn_terbit || '-'}</div>
+                            <div class="d-flex align-items-center mb-2 pb-2 border-bottom">
+                              <div class="text-center" style="width: 35px; color: #1a8a42;"><i class="fas fa-calendar-alt"></i></div>
+                              <div class="text-muted" style="width: 100px; font-size: 0.9rem;">Tahun</div>
+                              <div class="fw-semibold text-dark flex-grow-1" style="font-size: 0.95rem;">${item.thn_terbit || '-'}</div>
+                            </div>
+
+                            <div class="d-flex align-items-center mb-2 pb-2 border-bottom">
+                              <div class="text-center" style="width: 35px; color: #1a8a42;"><i class="fas fa-layer-group"></i></div>
+                              <div class="text-muted" style="width: 100px; font-size: 0.9rem;">Sisa Stok</div>
+                              <div class="fw-semibold text-dark flex-grow-1" style="font-size: 0.95rem;">
+                                ${item.avail_copy > 0 ? `<span class="badge bg-success">${item.avail_copy} Tersedia</span>` : `<span class="badge bg-danger">Habis</span>`}
+                              </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                              <div class="text-muted mb-1" style="font-size: 0.9rem;"><i class="fas fa-info-circle text-success me-1"></i> Sinopsis</div>
+                              <div class="text-dark" style="font-size: 0.85rem; line-height: 1.5; text-align: justify;">
+                                ${item.sinopsis || 'Tidak ada sinopsis tersedia untuk buku ini.'}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
                     </div>
                   </div>
 
                   <div class="modal-footer border-0 d-flex justify-content-center gap-2 pb-4 pt-1" style="background-color: #f8fbfa;">
                     <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 10px; font-weight: 500; border: 1px solid #dee2e6; color: #000000;">Batal</button>
-                    <button type="button" onclick="alihkanKePeminjaman('${judulAman}')" class="btn btn-success px-4 shadow-sm" style="background-color: #1a8a42; border-color: #1a8a42; border-radius: 10px; font-weight: 600;" data-bs-dismiss="modal">
-                      <i class="fas fa-bookmark me-1"></i> Pinjam Buku Ini
-                    </button>
+                    ${item.avail_copy > 0 
+                      ? `<button type="button" onclick="alihkanKePeminjaman('${judulAman}')" class="btn btn-success px-4 shadow-sm" style="background-color: #1a8a42; border-color: #1a8a42; border-radius: 10px; font-weight: 600;" data-bs-dismiss="modal">
+                           <i class="fas fa-bookmark me-1"></i> Pinjam Buku Ini
+                         </button>`
+                      : `<button type="button" class="btn btn-secondary px-4 shadow-sm" style="border-radius: 10px; font-weight: 600;" disabled>
+                           <i class="fas fa-ban me-1"></i> Stok Habis
+                         </button>`
+                    }
                   </div>
                 </div>
               </div>
