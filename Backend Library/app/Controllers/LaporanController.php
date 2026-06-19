@@ -27,13 +27,21 @@ class LaporanController extends ResourceController
 
         // 1. Total transaksi bulan ini
         $totalPeminjaman = (int) ($db->query("
-            SELECT COUNT(*) AS total FROM peminjaman
+            SELECT COUNT(*) AS total FROM (
+                SELECT tanggal_pinjam FROM peminjaman
+                UNION ALL
+                SELECT tanggal_pinjam FROM arsip_peminjaman
+            ) p
             WHERE MONTH(tanggal_pinjam) = ? AND YEAR(tanggal_pinjam) = ?
         ", [$bulan, $tahun])->getRow()->total ?? 0);
 
         // 2. Breakdown per-status
         $statusRows = $db->query("
-            SELECT status, COUNT(*) AS jumlah FROM peminjaman
+            SELECT status, COUNT(*) AS jumlah FROM (
+                SELECT status, tanggal_pinjam FROM peminjaman
+                UNION ALL
+                SELECT status, tanggal_pinjam FROM arsip_peminjaman
+            ) p
             WHERE MONTH(tanggal_pinjam) = ? AND YEAR(tanggal_pinjam) = ?
             GROUP BY status
         ", [$bulan, $tahun])->getResultArray();
@@ -41,31 +49,47 @@ class LaporanController extends ResourceController
         // 3. Top 5 buku paling sering dipinjam
         $topBuku = $db->query("
             SELECT b.judul_buku, COUNT(d.bukuID) AS total_dipinjam
-            FROM   detail d
-            JOIN   buku        b  ON d.bukuID    = b.bukuID
-            JOIN   peminjaman  p  ON d.pinjamID  = p.pinjamID
-            WHERE  MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
-            GROUP  BY d.bukuID, b.judul_buku
-            ORDER  BY total_dipinjam DESC
-            LIMIT  5
+            FROM (
+                SELECT pinjamID, bukuID FROM detail
+                UNION ALL
+                SELECT pinjamID, bukuID FROM arsip_detail
+            ) d
+            JOIN buku b ON d.bukuID = b.bukuID
+            JOIN (
+                SELECT pinjamID, tanggal_pinjam FROM peminjaman
+                UNION ALL
+                SELECT pinjamID, tanggal_pinjam FROM arsip_peminjaman
+            ) p ON d.pinjamID = p.pinjamID
+            WHERE MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
+            GROUP BY d.bukuID, b.judul_buku
+            ORDER BY total_dipinjam DESC
+            LIMIT 5
         ", [$bulan, $tahun])->getResultArray();
 
         // 4. Total harga/denda terkumpul
         $totalDenda = (float) ($db->query("
-            SELECT COALESCE(SUM(total_denda), 0) AS total FROM peminjaman
-            WHERE  MONTH(tanggal_pinjam) = ? AND YEAR(tanggal_pinjam) = ?
-            AND    status IN ('Dipinjam', 'Dikembalikan')
+            SELECT COALESCE(SUM(total_denda), 0) AS total FROM (
+                SELECT total_denda, tanggal_pinjam, status FROM peminjaman
+                UNION ALL
+                SELECT total_denda, tanggal_pinjam, status FROM arsip_peminjaman
+            ) p
+            WHERE MONTH(tanggal_pinjam) = ? AND YEAR(tanggal_pinjam) = ?
+            AND status IN ('Dipinjam', 'Dikembalikan')
         ", [$bulan, $tahun])->getRow()->total ?? 0);
 
         // 5. Top 3 peminjam paling aktif
         $topPeminjam = $db->query("
             SELECT pg.username, pg.nomor_identitas, COUNT(p.pinjamID) AS total_pinjam
-            FROM   peminjaman p
-            JOIN   pengguna   pg ON p.userID = pg.userID
-            WHERE  MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
-            GROUP  BY p.userID, pg.username, pg.nomor_identitas
-            ORDER  BY total_pinjam DESC
-            LIMIT  3
+            FROM (
+                SELECT pinjamID, userID, tanggal_pinjam FROM peminjaman
+                UNION ALL
+                SELECT pinjamID, userID, tanggal_pinjam FROM arsip_peminjaman
+            ) p
+            JOIN pengguna pg ON p.userID = pg.userID
+            WHERE MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
+            GROUP BY p.userID, pg.username, pg.nomor_identitas
+            ORDER BY total_pinjam DESC
+            LIMIT 3
         ", [$bulan, $tahun])->getResultArray();
 
         // Nama bulan Bahasa Indonesia
@@ -113,6 +137,7 @@ Berdasarkan data perpustakaan FAPUS untuk bulan **{$bulanLabel} {$tahun}** di ba
 
 Gunakan tag HTML: `<h3>`, `<h4>`, `<p>`, `<ul>`, `<ol>`, `<li>`, `<strong>`, `<em>`, `<hr>`, `<span style="color:...">`.
 Jangan gunakan tag `<html>`, `<body>`, atau `<head>`.
+PENTING: Pastikan seluruh output tercetak lengkap hingga akhir. Jangan gunakan tanda kurung siku (< >) untuk tujuan lain selain tag HTML yang diizinkan (jangan jadikan sebagai placeholder kalimat).
 PROMPT;
 
         // ── Kirim ke Google Gemini API ────────────────────────────────────────
@@ -133,7 +158,7 @@ PROMPT;
             ],
             'generationConfig' => [
                 'temperature'     => 0.7,
-                'maxOutputTokens' => 2048,
+                'maxOutputTokens' => 4096,
             ],
         ]);
 
@@ -143,7 +168,7 @@ PROMPT;
             CURLOPT_POST           => true,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_POSTFIELDS     => $requestBody,
-            CURLOPT_TIMEOUT        => 30,
+            CURLOPT_TIMEOUT        => 60,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => 0,
         ]);
@@ -200,11 +225,19 @@ PROMPT;
                 p.tanggal_kembali,
                 p.status,
                 p.total_denda
-            FROM peminjaman p
+            FROM (
+                SELECT pinjamID, userID, tanggal_pinjam, batas_kembali, tanggal_kembali, status, total_denda FROM peminjaman
+                UNION ALL
+                SELECT pinjamID, userID, tanggal_pinjam, batas_kembali, tanggal_kembali, status, total_denda FROM arsip_peminjaman
+            ) p
             LEFT JOIN pengguna pg ON p.userID = pg.userID
             LEFT JOIN (
                 SELECT pinjamID, MIN(bukuID) AS bukuID
-                FROM detail
+                FROM (
+                    SELECT pinjamID, bukuID FROM detail
+                    UNION ALL
+                    SELECT pinjamID, bukuID FROM arsip_detail
+                ) detail_all
                 GROUP BY pinjamID
             ) d ON p.pinjamID = d.pinjamID
             LEFT JOIN buku b ON d.bukuID = b.bukuID
@@ -265,6 +298,16 @@ PROMPT;
         $db = \Config\Database::connect();
         
         $db->transStart();
+
+        // Pindahkan data ke arsip_detail
+        $db->query("
+            INSERT INTO arsip_detail (detailID, pinjamID, bukuID, qty)
+            SELECT d.detailID, d.pinjamID, d.bukuID, d.qty
+            FROM detail d
+            JOIN peminjaman p ON d.pinjamID = p.pinjamID
+            WHERE MONTH(p.tanggal_pinjam) = ? AND YEAR(p.tanggal_pinjam) = ?
+            AND p.status IN ('Dikembalikan', 'Ditolak')
+        ", [$bulan, $tahun]);
 
         // Pindahkan data ke arsip_peminjaman
         $db->query("

@@ -408,3 +408,36 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+--
+-- Table structure for table `arsip_peminjaman`
+--
+
+CREATE TABLE `arsip_peminjaman` (
+  `pinjamID` bigint(20) NOT NULL,
+  `userID` bigint(20) DEFAULT NULL,
+  `tanggal_pinjam` datetime DEFAULT current_timestamp(),
+  `batas_kembali` datetime NOT NULL,
+  `tanggal_kembali` datetime DEFAULT NULL,
+  `status` enum('Pending','Dipinjam','Dikembalikan','Ditolak','Late') DEFAULT 'Pending',
+  `total_denda` decimal(10,2) DEFAULT 0.00,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`pinjamID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
+-- Table structure for table `arsip_detail`
+--
+
+CREATE TABLE `arsip_detail` (
+  `detailID` bigint(20) NOT NULL,
+  `pinjamID` bigint(20) DEFAULT NULL,
+  `bukuID` bigint(20) DEFAULT NULL,
+  `qty` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`detailID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+

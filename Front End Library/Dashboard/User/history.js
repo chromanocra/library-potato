@@ -52,6 +52,11 @@ async function loadHistoryUser(userID) {
     if (Array.isArray(result)) data = result;
     else if (result.data && Array.isArray(result.data)) data = result.data;
 
+    data = data.filter(item => {
+      const status = (item.status || "").toLowerCase();
+      return status === "dikembalikan" || status === "ditolak" || status === "selesai";
+    });
+
     if (data.length === 0) {
       tbody.innerHTML =
         '<tr><td colspan="7" class="text-center text-muted py-4">Belum ada riwayat peminjaman buku.</td></tr>';
