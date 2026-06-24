@@ -207,15 +207,17 @@ class PeminjamanController extends ResourceController
             return $this->fail("Buku belum/tidak sedang dipinjam", 400);
         }
 
-        // Hitung denda: 25000 per minggu keterlambatan
+        // Hitung denda: 25000 per menit keterlambatan (Pengujian)
         $batasKembali = new \DateTime($peminjaman['batas_kembali']);
         $tglKembali = new \DateTime(); // Hari ini
         
         $totalDenda = 0;
         if ($tglKembali > $batasKembali) {
-            $selisihHari = $tglKembali->diff($batasKembali)->days;
-            $mingguTerlambat = ceil($selisihHari / 7);
-            $totalDenda = $mingguTerlambat * 25000;
+            $diffMs = $tglKembali->getTimestamp() - $batasKembali->getTimestamp();
+            $menitTerlambat = floor($diffMs / 60);
+            if ($menitTerlambat > 0) {
+                $totalDenda = $menitTerlambat * 25000;
+            }
         }
 
         $this->model->update($id, [

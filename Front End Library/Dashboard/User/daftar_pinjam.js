@@ -104,6 +104,11 @@ async function loadPeminjamanUser(userID) {
         ? result.data
         : [];
 
+    data = data.filter(item => {
+      const status = (item.status || "").toLowerCase();
+      return status === "pending" || status === "dipinjam";
+    });
+
     if (data.length === 0) {
       tbody.innerHTML = `
                 <tr><td colspan="7" class="text-center py-5 text-muted">
@@ -157,7 +162,21 @@ async function loadPeminjamanUser(userID) {
       } else if (statusKey === "ditolak") {
         dendaHtml = '<span class="text-muted">—</span>';
       } else {
-        const nominal = parseFloat(item.total_denda) || 0;
+        let nominal = parseFloat(item.total_denda) || 0;
+        
+        // Kalkulasi dinamis jika masih dipinjam dan lewat waktu (Pengujian: per menit)
+        if (statusKey === "dipinjam" && item.batas_kembali) {
+          const batas = new Date(item.batas_kembali);
+          const now = new Date();
+          if (now > batas) {
+            const diffMs = now - batas;
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins > 0) {
+              nominal = diffMins * 25000;
+            }
+          }
+        }
+
         dendaHtml =
           nominal > 0
             ? `<span class="text-danger fw-bold">Rp ${nominal.toLocaleString("id-ID")}</span>`

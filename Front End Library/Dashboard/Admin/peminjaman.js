@@ -314,6 +314,21 @@ async function loadPeminjaman() {
         '<span class="text-muted small"><i class="fas fa-check-double"></i></span>';
     }
 
+    let nominalDenda = parseFloat(item.total_denda) || 0;
+    
+    // Kalkulasi denda berjalan dinamis untuk admin (1 menit = Rp 25.000 untuk pengujian)
+    if ((statusKey === "dipinjam" || statusKey === "late") && item.batas_kembali) {
+        const batas = new Date(item.batas_kembali);
+        const now = new Date();
+        if (now > batas) {
+            const diffMs = now - batas;
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins > 0) {
+                nominalDenda = diffMins * 25000;
+            }
+        }
+    }
+
     html += `
             <tr align="center">
                 <td>${i + 1}</td>
@@ -326,7 +341,7 @@ async function loadPeminjaman() {
                 </td>
                 <td>${formatTanggal(item.tanggal_pinjam)}</td>
                 <td>${formatTanggal(item.batas_kembali)}</td>
-                <td class="text-danger fw-medium">${formatRupiah(item.total_denda)}</td>
+                <td class="text-danger fw-medium">${formatRupiah(nominalDenda)}</td>
                 <td>${statusBadge}</td>
                 <td>${actionBtn}</td>
             </tr>`;

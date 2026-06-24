@@ -52,13 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const sqlTanggalPinjam =
         localNow.toISOString().slice(0, 16).replace("T", " ") + ":00";
 
+      // TEST DENDA 1 MENIT
       const internalBatasKembali = new Date(
-        now.getTime() + 7 * 24 * 60 * 60 * 1000,
+        now.getTime() + 1 * 60 * 1000
       );
+
       const localBatasKembali = new Date(
         internalBatasKembali.getTime() -
         internalBatasKembali.getTimezoneOffset() * 60000,
       );
+
       const sqlBatasKembali =
         localBatasKembali.toISOString().slice(0, 16).replace("T", " ") + ":00";
 
